@@ -52,7 +52,7 @@ const RegisterScreen2 = ({ location, history }) => {
       dispatch({ type: MODEL_DETAILS_RESET });
       history.push('/model/profile');
     }
-  }, [history, success]);
+  }, [history, success, dispatch]);
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];

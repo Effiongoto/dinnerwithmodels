@@ -131,8 +131,8 @@ const RegisterScreen = ({ history }) => {
               onChange={handleChange}
             >
               <option>Choose...</option>
-              <option value='Male'>male</option>
-              <option value='Female'>female</option>
+              <option value='male'>male</option>
+              <option value='female'>female</option>
             </Form.Control>
           </Form.Group>
 

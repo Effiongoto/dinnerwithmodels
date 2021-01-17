@@ -28,7 +28,7 @@ const ModelListScreen = ({ history, match }) => {
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
-      dispatch(listModels('', pageNumber));
+      dispatch(listModels('', '', '', pageNumber));
     } else {
       history.push('/login');
     }

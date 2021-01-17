@@ -8,7 +8,7 @@ const SubscriptionScreen = () => {
       <h3>Subscription for access to all models private pictures and videos</h3>
       <a
         href='https://paystack.com/pay/hyu87qs93x'
-        className='btn-block my-2'
+        className='btn btn-success my-2 d-flex justify-content-center'
         role='button'
       >
         Pay Now

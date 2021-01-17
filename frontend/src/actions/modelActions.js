@@ -34,14 +34,17 @@ import {
   MODEL_UPDATE_PROFILE_FAIL,
 } from '../constants/modelProfileConstants';
 
-export const listModels = (keyword = '', pageNumber = '') => async (
-  dispatch
-) => {
+export const listModels = (
+  keyword = '',
+  gender = '',
+  verified = '',
+  pageNumber = ''
+) => async (dispatch) => {
   try {
     dispatch({ type: MODEL_LIST_REQUEST });
 
     const { data } = await axios.get(
-      `/api/models?keyword=${keyword}&pageNumber=${pageNumber}`
+      `/api/models?keyword=${keyword}&gender=${gender}&verified=${verified}&pageNumber=${pageNumber}`
     );
 
     dispatch({

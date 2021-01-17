@@ -21,7 +21,7 @@ const ModelAdminScreen = ({ history, match }) => {
     if (!userInfo.isAdmin) {
       history.push('/login/model');
     } else {
-      if (!model || !model.username) {
+      if (!model || !model.username || model._id != match.params.id) {
         // dispatch({ type: MODEL_UPDATE_PROFILE_RESET });
         dispatch(listModelDetails(match.params.id));
       }
@@ -36,6 +36,9 @@ const ModelAdminScreen = ({ history, match }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
+          <Link className='btn btn-light my-3' to='/admin/modellist'>
+            Go Back
+          </Link>
           <h1>Model Profile</h1>
           <Link
             className='btn btn-success my-3 ml-auto'

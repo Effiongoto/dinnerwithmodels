@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import Model from '../components/Model';
@@ -10,6 +11,8 @@ import { listModels } from '../actions/modelActions';
 const HomeScreen = ({ match, history }) => {
   const [heading, setHeading] = useState('All Models');
   const keyword = match.params.keyword;
+  const gender = match.params.gender;
+  const verified = 'true';
 
   const pageNumber = match.params.pageNumber || 1;
 
@@ -19,15 +22,15 @@ const HomeScreen = ({ match, history }) => {
   const { loading, error, models, page, pages } = modelList;
 
   useEffect(() => {
-    dispatch(listModels(keyword, pageNumber));
-  }, [dispatch, keyword, pageNumber]);
+    dispatch(listModels(keyword, gender, verified, pageNumber));
+  }, [dispatch, keyword, gender, pageNumber]);
 
   const buttonHandler = (evt) => {
     setHeading(evt.target.value);
     if (evt.target.value === 'Female Models') {
-      history.push('/female');
+      history.push('/gender/female');
     } else if (evt.target.value === 'Male Models') {
-      history.push('/male');
+      history.push('/gender/male');
     } else {
       history.push(`/`);
     }
@@ -52,7 +55,7 @@ const HomeScreen = ({ match, history }) => {
           <Message variant='danger'>{error}</Message>
         ) : (
           <>
-            <Col md={10}>
+            <Col md={9}>
               <h1 className='d-flex justify-content-center'>{heading}</h1>
               <Row>
                 {models.map((model) => (
@@ -67,8 +70,13 @@ const HomeScreen = ({ match, history }) => {
                 keyword={keyword ? keyword : ''}
               />
             </Col>
-            <Col md={2}>
+            <Col md={3}>
               <h1>Twitter widget</h1>
+              <TwitterTimelineEmbed
+                sourceType='profile'
+                screenName='saurabhnemade'
+                options={{ height: 400 }}
+              />
             </Col>
           </>
         )}

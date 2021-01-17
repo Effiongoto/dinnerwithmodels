@@ -11,14 +11,28 @@ const getModels = asyncHandler(async (req, res) => {
 
   const keyword = req.query.keyword
     ? {
-        name: {
+        username: {
           $regex: req.query.keyword,
           $options: 'i',
         },
       }
     : {};
-  const count = await Model.countDocuments({ ...keyword });
-  const models = await Model.find({ ...keyword })
+  const gender = req.query.gender
+    ? {
+        gender: req.query.gender,
+      }
+    : {};
+  const verified = req.query.verified
+    ? {
+        isVerified: true,
+      }
+    : {};
+  const count = await Model.countDocuments({
+    ...keyword,
+    ...gender,
+    ...verified,
+  });
+  const models = await Model.find({ ...keyword, ...gender, ...verified })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 

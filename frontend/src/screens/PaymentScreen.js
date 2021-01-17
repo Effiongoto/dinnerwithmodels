@@ -16,8 +16,8 @@ const PaymentScreen = ({ match, history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const UserPay = useSelector((state) => state.UserPay);
-  const { success: successPay } = UserPay;
+  // const UserPay = useSelector((state) => state.UserPay);
+  // const { success: successPay } = UserPay;
 
   const modelUsername = {
     username: model.username,
@@ -64,16 +64,19 @@ const PaymentScreen = ({ match, history }) => {
       ) : (
         <>
           <h3>Payment for {model.username}'s private information</h3>
-          <PaystackButton {...componentProps} className='btn btn-dark' />
+          <PaystackButton
+            {...componentProps}
+            className='btn btn-success my-2 d-flex justify-content-center'
+          />
           {/* <Message className='my-2'>
             Please make sure you fill in the same Email Address used to sign up
             and the model you want acces to
           </Message> */}
-          {successPay && (
+          {/* {successPay && (
             <link to={`/model/${model._id}`}>
               Go back to {model.username}'s profile
             </link>
-          )}
+          )} */}
         </>
       )}
     </FormContainer>
