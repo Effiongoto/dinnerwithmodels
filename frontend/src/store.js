@@ -3,28 +3,46 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   modelListReducer,
+  modelAllReducer,
   modelDetailsReducer,
   modelLoginReducer,
   modelRegisterReducer,
   modelUpdateProfileReducer,
+  modelDeleteReducer,
+  modelUpdateReducer,
+  modelReviewCreateReducer,
 } from './reducers/modelReducers';
 import {
   userLoginReducer,
   userRegisterReducer,
   userDetailsReducer,
   userUpdateProfileReducer,
+  userListReducer,
+  userDeleteReducer,
+  userUpdateReducer,
+  userPayReducer,
+  userSubscribeReducer,
 } from './reducers/userReducers';
 
 const reducer = combineReducers({
   modelList: modelListReducer,
+  modelAll: modelAllReducer,
   modelDetails: modelDetailsReducer,
   modelLogin: modelLoginReducer,
   modelRegister: modelRegisterReducer,
   modelUpdateProfile: modelUpdateProfileReducer,
+  modelDelete: modelDeleteReducer,
+  modelUpdate: modelUpdateReducer,
+  modelReviewCreate: modelReviewCreateReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
+  userList: userListReducer,
+  userDelete: userDeleteReducer,
+  userUpdate: userUpdateReducer,
+  userPay: userPayReducer,
+  userSubscribe: userSubscribeReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

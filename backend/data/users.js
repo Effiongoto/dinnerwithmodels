@@ -16,6 +16,7 @@ const users = [
     name: 'Jane Doe',
     email: 'Jane@example.com',
     password: bcrypt.hashSync('123456', 10),
+    modelsPaidFor: ['jojo', 'janet'],
   },
 ];
 

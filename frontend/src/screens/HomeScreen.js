@@ -1,36 +1,76 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import Model from '../components/Model';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import Paginate from '../components/Paginate';
 import { listModels } from '../actions/modelActions';
 
-const HomeScreen = () => {
+const HomeScreen = ({ match, history }) => {
+  const [heading, setHeading] = useState('All Models');
+  const keyword = match.params.keyword;
+
+  const pageNumber = match.params.pageNumber || 1;
+
   const dispatch = useDispatch();
 
   const modelList = useSelector((state) => state.modelList);
-  const { loading, error, models } = modelList;
+  const { loading, error, models, page, pages } = modelList;
 
   useEffect(() => {
-    dispatch(listModels());
-  }, [dispatch]);
+    dispatch(listModels(keyword, pageNumber));
+  }, [dispatch, keyword, pageNumber]);
+
+  const buttonHandler = (evt) => {
+    setHeading(evt.target.value);
+    if (evt.target.value === 'Female Models') {
+      history.push('/female');
+    } else if (evt.target.value === 'Male Models') {
+      history.push('/male');
+    } else {
+      history.push(`/`);
+    }
+  };
   return (
     <>
-      <h1>Latest Models</h1>
+      <ButtonGroup size='sm' className='justify-content-md-center'>
+        <Button onClick={buttonHandler} value='All Models'>
+          All Models
+        </Button>
+        <Button onClick={buttonHandler} value='Male Models'>
+          Male Models
+        </Button>
+        <Button onClick={buttonHandler} value='Female Models'>
+          Female Models
+        </Button>
+      </ButtonGroup>
       <Row>
         {loading ? (
           <Loader />
         ) : error ? (
           <Message variant='danger'>{error}</Message>
         ) : (
-          <Row>
-            {models.map((model) => (
-              <Col key={model._id} sm={12} md={6} lg={4} xl={3}>
-                <Model model={model} />
-              </Col>
-            ))}
-          </Row>
+          <>
+            <Col md={10}>
+              <h1 className='d-flex justify-content-center'>{heading}</h1>
+              <Row>
+                {models.map((model) => (
+                  <Col key={model._id} sm={12} md={6} lg={4} xl={3}>
+                    <Model model={model} />
+                  </Col>
+                ))}
+              </Row>
+              <Paginate
+                pages={pages}
+                page={page}
+                keyword={keyword ? keyword : ''}
+              />
+            </Col>
+            <Col md={2}>
+              <h1>Twitter widget</h1>
+            </Col>
+          </>
         )}
       </Row>
     </>

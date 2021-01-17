@@ -7,7 +7,7 @@ const Model = ({ model }) => {
   return (
     <Card className='my-3 p-3 rounded'>
       <Link to={`/model/${model._id}`}>
-        <Card.Img src={model.images[0]} variant='top' />
+        <Card.Img src={model.profileImage} variant='top' />
       </Link>
 
       <Card.Body>

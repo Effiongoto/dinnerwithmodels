@@ -45,3 +45,9 @@ h3 {
 .review-number {
   margin: 0.2rem;
 }
+
+#besucherzaehler2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

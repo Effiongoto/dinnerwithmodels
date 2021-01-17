@@ -1,22 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Row, Col, Image, ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import Rating from '../components/Rating';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import {
-  getModelDetails,
-  updateModelProfile,
-  listModelDetails,
-} from '../actions/modelActions';
-// import { MODEL_UPDATE_PROFILE_RESET } from '../constants/modelProfileConstants';
+import { getModelDetails } from '../actions/modelActions';
 
 const ModelProfileScreen = ({ location, history }) => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState(null);
-
   const dispatch = useDispatch();
 
   const modelDetails = useSelector((state) => state.modelDetails);
@@ -26,89 +17,125 @@ const ModelProfileScreen = ({ location, history }) => {
   const modelLogin = useSelector((state) => state.modelLogin);
   const { modelInfo } = modelLogin;
 
-  const modelUpdateProfile = useSelector((state) => state.modelUpdateProfile);
-  const { success } = modelUpdateProfile;
-
   useEffect(() => {
     if (!modelInfo) {
       history.push('/login/model');
     } else {
-      if (!model || !model.username || success) {
+      if (!model || !model.username) {
         // dispatch({ type: MODEL_UPDATE_PROFILE_RESET });
         dispatch(getModelDetails('profile'));
-      } else {
-        setUsername(model.username);
-        setEmail(model.email);
       }
     }
-  }, [dispatch, history, modelInfo, model, success]);
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match');
-    } else {
-      dispatch(
-        updateModelProfile({ id: model._id, username, email, password })
-      );
-    }
-  };
+  }, [dispatch, history, modelInfo, model]);
 
   return (
-    <Row>
-      <Col md={3}>
-        <h2>User Profile</h2>
-        {message && <Message variant='danger'>{message}</Message>}
-        {error && <Message variant='danger'>{error}</Message>}
-        {success && <Message variant='success'>Profile Updated</Message>}
-        {loading && <Loader />}
-        <Form onSubmit={submitHandler}>
-          <Form.Group controlId='username'>
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-              type='username'
-              placeholder='Enter username'
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+    <>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant='danger'>{error}</Message>
+      ) : (
+        <>
+          <h1>Model Profile</h1>
+          <Link
+            className='btn btn-success my-3 ml-auto'
+            to='/profile/model/edit'
+          >
+            Edit Profile
+          </Link>
+          <h2>{model.username}</h2>
+          {model.isVerified ? (
+            <Message>Profile is verified</Message>
+          ) : (
+            <>
+              <Message variant='danger'>Profile is not verified</Message>
+              <p>
+                Wait 3 days for profile to be verified. After 3 days, reach out
+                to the admin for guidance.
+              </p>
+            </>
+          )}
+          <h3>About Me</h3>
+          <p>{model.about}</p>
+          <p>Date of birth:{model.DOB}</p>
+          <p>
+            <strong>Location: </strong>
+            {model.city}, {model.state}, {model.country}{' '}
+          </p>
+          <p>Gender: {model.gender}</p>
+          <p>States visited often: {model.states_visited_often}</p>
+          <p>Minimum cash gift:{model.minCashGift}</p>
+          <p>
+            Open to dates with {model.open_to_dinner_dates}{' '}
+            {model.open_to_dinner_dates === 'Both' ? (
+              <span>sexes</span>
+            ) : (
+              <span>only</span>
+            )}
+          </p>
+          <h3>Private Info</h3>
+          <p>Email: {model.email}</p>
+          <p>Phone Number: {model.phoneNumber1}</p>
+          {model.phoneNumber2 && <p>Other Number: {model.phoneNumber2}</p>}
+          <p>Whatsapp Number: {model.whatsappNumber}</p>
+          <h3>Profile picture:</h3>
+          <Image
+            src={model.profileImage}
+            alt={model.name}
+            fluid
+            style={{ height: '150px' }}
+          />
+          <h3>Other pictures:</h3>
+          <Row>
+            {model.images &&
+              model.images.map((img) => (
+                <Col md={3}>
+                  <Image
+                    src={img}
+                    alt={model.name}
+                    fluid
+                    style={{ height: '150px' }}
+                  />
+                </Col>
+              ))}
+          </Row>
+          <h3>Nude pictures:</h3>
+          <Row>
+            {model.privateImages &&
+              model.privateImages.map((img) => (
+                <Col md={3}>
+                  <Image
+                    src={img}
+                    alt={model.name}
+                    fluid
+                    style={{ height: '150px' }}
+                  />
+                </Col>
+              ))}
+          </Row>
+          <h3>Verification picture:</h3>
+          <Image
+            src={model.verificationImage}
+            alt={model.name}
+            fluid
+            style={{ height: '150px' }}
+          />
 
-          <Form.Group controlId='email'>
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-              type='email'
-              placeholder='Enter email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId='password'>
-            <Form.Label>Password Address</Form.Label>
-            <Form.Control
-              type='password'
-              placeholder='Enter password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId='confirmPassword'>
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              type='password'
-              placeholder='Confirm password'
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Button type='submit' variant='primary'>
-            Update
-          </Button>
-        </Form>
-      </Col>
-    </Row>
+          <h3>Reviews</h3>
+          {model.reviews.length === 0 && <Message>No Reviews</Message>}
+          <ListGroup variant='flush'>
+            {model.reviews.map((review) => (
+              <ListGroup.Item key={review._id}>
+                <strong>{review.name}</strong>
+                <Rating value={review.rating} />
+                <p>{review.createdAt.substring(0, 10)}</p>
+                <p>{review.comment}</p>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        </>
+      )}
+    </>
   );
 };
 

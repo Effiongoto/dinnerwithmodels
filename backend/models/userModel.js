@@ -21,6 +21,20 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    isSubscribed: {
+      //to show verified user all private pictures
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    subscribedAt: {
+      type: Date,
+    },
+    modelsPaidFor: {
+      type: Array,
+      required: true,
+      default: [],
+    },
   },
   {
     timestamps: true,

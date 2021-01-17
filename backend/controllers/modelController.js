@@ -2,12 +2,34 @@ import asyncHandler from 'express-async-handler';
 import generateToken from '../utils/generateToken.js';
 import Model from '../models/modelModel.js';
 
-// @desc    Fetch all models
+// @desc    Fetch models by page
 // @route   GET /api/models
 // @access  Public
 const getModels = asyncHandler(async (req, res) => {
-  const models = await Model.find({});
+  const pageSize = 15;
+  const page = Number(req.query.pageNumber) || 1;
 
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: 'i',
+        },
+      }
+    : {};
+  const count = await Model.countDocuments({ ...keyword });
+  const models = await Model.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.json({ models, page, pages: Math.ceil(count / pageSize) });
+});
+
+// @desc    Fetch all models
+// @route   GET /api/models/all
+// @access  Public
+const getAllModels = asyncHandler(async (req, res) => {
+  const models = await Model.find({});
   res.json(models);
 });
 
@@ -15,7 +37,7 @@ const getModels = asyncHandler(async (req, res) => {
 // @route   GET /api/models/:id
 // @access  Public
 const getModelById = asyncHandler(async (req, res) => {
-  const model = await Model.findById(req.params.id);
+  const model = await Model.findById(req.params.id).select('-password');
 
   if (model) {
     res.json(model);
@@ -51,19 +73,60 @@ const authModel = asyncHandler(async (req, res) => {
 // @route   POST /api/models
 // @access  Public
 const registerModel = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const {
+    username,
+    email,
+    password,
+    gender,
+    country,
+    state,
+    city,
+    states_visited_often,
+    open_to_dinner_dates,
+    DOB,
+    about,
+    minCashGift,
+    phoneNumber1,
+    phoneNumber2,
+    whatsappNumber,
+    attestation1,
+    attestation2,
+    attestation3,
+    attestation4,
+  } = req.body;
 
   const modelExists = await Model.findOne({ email });
+  const usernameExists = await Model.findOne({ username });
 
   if (modelExists) {
     res.status(400);
     throw new Error('Model already exists');
+  }
+  if (usernameExists) {
+    res.status(400);
+    throw new Error('Username already taken');
   }
 
   const model = await Model.create({
     username,
     email,
     password,
+    gender,
+    country,
+    state,
+    city,
+    states_visited_often,
+    open_to_dinner_dates,
+    DOB,
+    about,
+    minCashGift,
+    phoneNumber1,
+    phoneNumber2,
+    whatsappNumber,
+    attestation1,
+    attestation2,
+    attestation3,
+    attestation4,
   });
 
   if (model) {
@@ -87,20 +150,15 @@ const getModelProfile = asyncHandler(async (req, res) => {
   const model = await Model.findById(req.model._id);
 
   if (model) {
-    res.json({
-      _id: model._id,
-      username: model.username,
-      email: model.email,
-      isVerified: model.isVerified,
-    });
+    res.json(model);
   } else {
     res.status(404);
     throw new Error('Model not found');
   }
 });
 
-// @desc    Update user profile
-// @route   PUT /api/users/profile
+// @desc    Update model profile
+// @route   PUT /api/models/profile
 // @access  Private
 const updateModelProfile = asyncHandler(async (req, res) => {
   const model = await Model.findById(req.model._id);
@@ -108,6 +166,29 @@ const updateModelProfile = asyncHandler(async (req, res) => {
   if (model) {
     model.username = req.body.username || model.username;
     model.email = req.body.email || model.email;
+    model.gender = req.body.gender || model.gender;
+    model.country = req.body.country || model.country;
+    model.state = req.body.state || model.state;
+    model.city = req.body.city || model.city;
+    model.states_visited_often =
+      req.body.states_visited_often || model.states_visited_often;
+    model.open_to_dinner_dates =
+      req.body.open_to_dinner_dates || model.open_to_dinner_dates;
+    model.DOB = req.body.DOB || model.DOB;
+    model.about = req.body.about || model.about;
+    model.minCashGift = req.body.minCashGift || model.minCashGift;
+    model.phoneNumber1 = req.body.phoneNumber1 || model.phoneNumber1;
+    model.phoneNumber2 = req.body.phoneNumber2 || model.phoneNumber2;
+    model.whatsappNumber = req.body.whatsappNumber || model.whatsappNumber;
+    model.attestation1 = req.body.attestation1 || model.attestation1;
+    model.attestation2 = req.body.attestation2 || model.attestation2;
+    model.attestation3 = req.body.attestation3 || model.attestation3;
+    model.attestation4 = req.body.attestation4 || model.attestation4;
+    model.images = req.body.images || model.images;
+    model.privateImages = req.body.privateImages || model.privateImages;
+    model.profileImage = req.body.profileImage || model.profileImage;
+    model.verificationImage =
+      req.body.verificationImage || model.verificationImage;
     if (req.body.password) {
       model.password = req.body.password;
     }
@@ -116,9 +197,9 @@ const updateModelProfile = asyncHandler(async (req, res) => {
 
     res.json({
       _id: updatedModel._id,
-      name: updatedModel.name,
+      username: updatedModel.username,
       email: updatedModel.email,
-      isAdmin: updatedModel.isAdmin,
+      isVerified: updatedModel.isVerified,
       token: generateToken(updatedModel._id),
     });
   } else {
@@ -127,11 +208,91 @@ const updateModelProfile = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Delete a model
+// @route   DELETE /api/models/:id
+// @access  Private/Admin
+const deleteModel = asyncHandler(async (req, res) => {
+  const model = await Model.findById(req.params.id);
+
+  if (model) {
+    await model.remove();
+    res.json({ message: 'model removed' });
+  } else {
+    res.status(404);
+    throw new Error('model not found');
+  }
+});
+
+// @desc    Update model
+// @route   PUT /api/models/:id
+// @access  Private/Admin
+const updateModel = asyncHandler(async (req, res) => {
+  const model = await Model.findById(req.params.id);
+
+  if (model) {
+    model.username = req.body.username || model.username;
+    model.email = req.body.email || model.email;
+    model.isVerified = req.body.isVerified;
+
+    const updatedModel = await model.save();
+
+    res.json(updatedModel);
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// @desc    Create new review
+// @route   POST /api/models/:id/reviews
+// @access  Private
+const createModelReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body;
+
+  const model = await Model.findById(req.params.id);
+
+  if (model) {
+    const alreadyReviewed = model.reviews.find(
+      (r) => r.user.toString() === req.user._id.toString()
+    );
+
+    if (alreadyReviewed) {
+      res.status(400);
+      throw new Error('Model already reviewed');
+    }
+
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    };
+
+    model.reviews.push(review);
+
+    model.numReviews = model.reviews.length;
+
+    model.rating =
+      model.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      model.reviews.length;
+
+    await model.save();
+    res.status(201).json({ message: 'Review added' });
+  } else {
+    res.status(404);
+    throw new Error('Model not found');
+  }
+});
+
 export {
   getModels,
+  getAllModels,
   getModelById,
   authModel,
   registerModel,
   getModelProfile,
   updateModelProfile,
+  deleteModel,
+  updateModel,
+  createModelReview,
 };

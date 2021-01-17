@@ -6,6 +6,11 @@ const reviewSchema = mongoose.Schema(
     name: { type: String, required: true },
     rating: { type: Number, required: true },
     comment: { type: String, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,
@@ -29,7 +34,7 @@ const modelSchema = mongoose.Schema(
     },
     gender: {
       type: String,
-      // required: true,
+      required: true,
     },
     reviews: [reviewSchema],
     rating: {
@@ -44,72 +49,85 @@ const modelSchema = mongoose.Schema(
     },
     about: {
       type: String,
-      // required: true,
+      required: true,
     },
     DOB: {
       type: String,
-      // required: true,
+      required: true,
     },
     country: {
       type: String,
-      // required: true,
+      required: true,
     },
     state: {
       type: String,
-      // required: true,
+      required: true,
     },
     city: {
       type: String,
-      // required: true,
+      required: true,
     },
     states_visited_often: {
-      type: Array,
+      type: String,
       required: false,
+    },
+    open_to_dinner_dates: {
+      type: String,
+      required: true,
     },
     isVerified: {
       type: Boolean,
       required: true,
       default: false,
     },
-    price: {
+    minCashGift: {
       type: Number,
-      // required: true,
-      default: 5000,
+      required: true,
     },
     profileImage: {
       type: String,
-      // required: true,
     },
     images: {
       type: Array,
-      // required: true,
     },
     privateImages: {
       type: Array,
-      // required: true,
     },
     verificationImage: {
       type: String,
     },
     minCashGift: {
-      type: Number,
-      // required: true,
-      default: 0,
+      type: String,
+      required: true,
     },
     phoneNumber1: {
-      type: String,
-      // required: true,
-      default: '0000',
+      type: Number,
+      required: true,
+      default: '',
     },
     phoneNumber2: {
-      type: String,
-      // required: false,
-      default: '0000',
+      type: Number,
+      required: false,
     },
     whatsappNumber: {
+      type: Number,
+      required: true,
+    },
+    attestation1: {
       type: String,
-      // required: true,
-      default: '0000',
+      required: false,
+    },
+    attestation2: {
+      type: String,
+      required: false,
+    },
+    attestation3: {
+      type: String,
+      required: false,
+    },
+    attestation4: {
+      type: String,
+      required: false,
     },
   },
   {
