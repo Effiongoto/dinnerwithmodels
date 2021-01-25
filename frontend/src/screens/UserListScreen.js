@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, ListGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -74,7 +74,15 @@ const UserListScreen = ({ history }) => {
                     <i className='fas fa-times' style={{ color: 'red' }}></i>
                   )}
                 </td>
-                <td>{user.modelsPaidFor}</td>
+                <td>
+                  <ListGroup variant='flush'>
+                    {user.modelsPaidFor.map((item, index) => (
+                      <ListGroup.Item key={index} item={item}>
+                        {item}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </td>
                 {/* <td>
                   <ul>
                     {user.modelsPaidFor.map((m) => {

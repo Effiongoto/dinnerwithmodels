@@ -315,6 +315,13 @@ export const userPay = (userId, modelUsername) => async (
       type: USER_PAY_SUCCESS,
       payload: data,
     });
+
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
+
+    localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_PAY_FAIL,
@@ -352,6 +359,13 @@ export const userSubscribe = (userId) => async (dispatch, getState) => {
       type: USER_SUBSCRIBE_SUCCESS,
       payload: data,
     });
+
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
+
+    localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_SUBSCRIBE_FAIL,

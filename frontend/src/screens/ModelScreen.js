@@ -67,42 +67,94 @@ const ModelScreen = ({ match, history }) => {
         <>
           <h2>{model.username}</h2>
           <Row>
+            <Image
+              src={model.profileImage}
+              alt={model.username}
+              fluid
+              style={{ height: '300px', marginRight: 20, marginBottom: 20 }}
+            />
             {model.images &&
               model.images.map((img) => (
-                <Col md={3}>
-                  <Image src={img} alt={model.name} fluid />
-                </Col>
+                <Image
+                  src={img}
+                  alt={model.username}
+                  fluid
+                  style={{ height: '300px', marginRight: 20, marginBottom: 20 }}
+                />
               ))}
           </Row>
-          <h3>Nudes</h3>
+          <h3 className='mt-5'>About Me:</h3>
+          <Rating
+            value={model.rating}
+            text={`from ${model.numReviews} reviews`}
+          />
           <p>
-            to unlock allprivate pictures on website for N10,000 monthly{' '}
-            <Button type='button' className='btn' onClick={subscriptionHandler}>
-              Click Here
-            </Button>
+            <strong>
+              {model.username} is a {model.gender} model from {model.city},{' '}
+              {model.state}, {model.country}
+            </strong>
           </p>
-          <Row className='mt-5'>
-            <Col md={3}>
-              <Image
-                // src={model.images}
-                alt={model.name}
-                fluid
-                style={{ filter: 'blur(20px)' }}
-              />
-            </Col>
-          </Row>
-          <h3 className='mt-5'>Services</h3>
-          <h3 className='mt-5'>Reviews</h3>
+          <p>
+            <strong>Date of bith:</strong> {model.DOB}{' '}
+          </p>
+          <p>{model.about}</p>
+          <p>States visited often: {model.states_visited_often}</p>
+          <p>Minimum cash gift:{model.minCashGift}</p>
+          <p>
+            Open to dates with {model.open_to_dinner_dates}s{' '}
+            {model.open_to_dinner_dates === 'Both' ? <>sexes</> : <>only</>}
+          </p>
+
+          <h3>Nude Pictures:</h3>
+          {userInfo && userInfo.isSubscribed ? (
+            <Row>
+              {model.privateImages &&
+                model.privateImages.map((img) => (
+                  <Image
+                    src={img}
+                    alt={model.username}
+                    fluid
+                    style={{
+                      height: '300px',
+                      marginRight: 20,
+                      marginBottom: 20,
+                    }}
+                  />
+                ))}
+            </Row>
+          ) : (
+            <p>
+              to unlock all private pictures on website for N10,000 monthly{' '}
+              <Button
+                type='button'
+                className='btn'
+                onClick={subscriptionHandler}
+              >
+                Click Here
+              </Button>
+            </p>
+          )}
+
           <h3 className='mt-5'>Contact Info</h3>
-          <p>
-            To buy model's phone number for N5,000{' '}
-            <Button type='button' className='btn' onClick={paymentHandler}>
-              Click Here
-            </Button>
-          </p>
+          {userInfo &&
+          userInfo.modelsPaidFor.find((x) => x === model.username) ? (
+            <>
+              <p>Phone Number: {model.phoneNumber1}</p>
+              {model.phoneNumber2 && <p>Other Number: {model.phoneNumber2}</p>}
+              <p>Whatsapp Number: {model.whatsappNumber}</p>
+            </>
+          ) : (
+            <p>
+              To buy model's phone number for N5,000{' '}
+              <Button type='button' className='btn' onClick={paymentHandler}>
+                Click Here
+              </Button>
+            </p>
+          )}
+
           <Row>
             <Col md={6}>
-              <h2>Reviews</h2>
+              <h3>Reviews</h3>
               {model.reviews.length === 0 && <Message>No Reviews</Message>}
               <ListGroup variant='flush'>
                 {model.reviews.map((review) => (
@@ -114,7 +166,7 @@ const ModelScreen = ({ match, history }) => {
                   </ListGroup.Item>
                 ))}
                 <ListGroup.Item>
-                  <h3>Write a Customer Review</h3>
+                  <h3>Write a Review</h3>
                   {errorModelReview && (
                     <Message variant='danger'>{errorModelReview}</Message>
                   )}

@@ -16,6 +16,8 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      isSubscribed: user.isSubscribed,
+      modelsPaidFor: user.modelsPaidFor,
       token: generateToken(user._id),
     });
   } else {
@@ -49,6 +51,8 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      isSubscribed: user.isSubscribed,
+      modelsPaidFor: user.modelsPaidFor,
       token: generateToken(user._id),
     });
   } else {
@@ -69,6 +73,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      modelsPaidFor: user.modelsPaidFor,
+      isSubscribed: user.isSubscribed,
     });
   } else {
     res.status(404);
@@ -96,6 +102,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      isSubscribed: user.isSubscribed,
+      modelsPaidFor: user.modelsPaidFor,
       token: generateToken(updatedUser._id),
     });
   } else {
@@ -152,10 +160,18 @@ const updateUser = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.isAdmin = req.body.isAdmin;
     user.isSubscribed = req.body.isSubscribed;
-    user.modelsPaidFor =
-      [...user.modelsPaidFor, req.body.modelsPaidFor] || user.modelsPaidFor;
-    //makelowercase here or in ModelScreen
+    if (
+      req.body.modelsPaidFor &&
+      user.modelsPaidFor.find((x) => x === req.body.modelsPaidFor)
+    ) {
+      user.modelsPaidFor = user.modelsPaidFor;
+    } else if (req.body.modelsPaidFor) {
+      user.modelsPaidFor = [...user.modelsPaidFor, req.body.modelsPaidFor];
+    } else {
+      user.modelsPaidFor = user.modelsPaidFor;
+    }
     if (req.body.password) {
+      //makelowercase here or in ModelScreen
       user.password = req.body.password;
     }
 
@@ -166,8 +182,8 @@ const updateUser = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
-      isSubscribed: updateUser.isSubscribed,
-      modelsPaidFor: updateUser.modelsPaidFor,
+      isSubscribed: updatedUser.isSubscribed,
+      modelsPaidFor: updatedUser.modelsPaidFor,
     });
   } else {
     res.status(404);

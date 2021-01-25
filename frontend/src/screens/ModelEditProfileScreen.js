@@ -29,7 +29,6 @@ const ModelEditProfileScreen = ({ history }) => {
 
   const [newModel, setNewModel] = useState({
     id: modelInfo._id,
-    username: '',
     email: '',
     password: '',
     gender: '',
@@ -60,7 +59,6 @@ const ModelEditProfileScreen = ({ history }) => {
         } else {
           setNewModel({
             id: modelInfo._id,
-            username: model.username,
             email: model.email,
             gender: model.gender,
             country: model.country,
@@ -110,12 +108,11 @@ const ModelEditProfileScreen = ({ history }) => {
           <FormContainer>
             <h1>Update Profile</h1>
             <Form onSubmit={submitHandler}>
-              <h2>Step 1: Personal details</h2>
               <Message variant='warning'>
                 Ensure you start with a capital letter on all text fileds
               </Message>
               <Form.Row>
-                <Form.Group as={Col} controlId='username'>
+                {/* <Form.Group as={Col} controlId='username'>
                   <Form.Label>Username</Form.Label>
                   <Form.Control
                     type='username'
@@ -128,7 +125,7 @@ const ModelEditProfileScreen = ({ history }) => {
                     Note: you won't be able to change your username in the
                     future
                   </Form.Text>
-                </Form.Group>
+                </Form.Group> */}
 
                 <Form.Group as={Col} controlId='email'>
                   <Form.Label>Email Address</Form.Label>
@@ -175,8 +172,8 @@ const ModelEditProfileScreen = ({ history }) => {
                     onChange={handleChange}
                   >
                     <option>Choose...</option>
-                    <option value='Male'>male</option>
-                    <option value='Female'>female</option>
+                    <option value='male'>male</option>
+                    <option value='female'>female</option>
                   </Form.Control>
                 </Form.Group>
 
@@ -269,8 +266,8 @@ const ModelEditProfileScreen = ({ history }) => {
                 >
                   <option>Choose...</option>
                   <option value='Both'>Both</option>
-                  <option value='Male only'>Male only</option>
-                  <option value='Female only'>Female only</option>
+                  <option value='Male'>Male only</option>
+                  <option value='Female'>Female only</option>
                 </Form.Control>
                 <Form.Text className='text-muted'>
                   Please note, males are usually the ones who pay for anything

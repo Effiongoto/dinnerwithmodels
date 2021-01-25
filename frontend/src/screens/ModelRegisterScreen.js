@@ -69,7 +69,7 @@ const RegisterScreen = ({ history }) => {
       <Form onSubmit={submitHandler}>
         <h2>Step 1: Personal details</h2>
         <Message variant='warning'>
-          Ensure you start with a capital letter on all text fileds
+          Ensure you start with a capital letter on all text fields
         </Message>
         <Form.Row>
           <Form.Group as={Col} controlId='username'>
@@ -222,8 +222,8 @@ const RegisterScreen = ({ history }) => {
           >
             <option>Choose...</option>
             <option value='Both'>Both</option>
-            <option value='Male only'>Male only</option>
-            <option value='Female only'>Female only</option>
+            <option value='Male'>Male only</option>
+            <option value='Female'>Female only</option>
           </Form.Control>
           <Form.Text className='text-muted'>
             Please note, males are usually the ones who pay for anything with

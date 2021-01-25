@@ -21,7 +21,7 @@ const ModelAdminScreen = ({ history, match }) => {
     if (!userInfo.isAdmin) {
       history.push('/login/model');
     } else {
-      if (!model || !model.username || model._id != match.params.id) {
+      if (!model || !model.username || model._id !== match.params.id) {
         // dispatch({ type: MODEL_UPDATE_PROFILE_RESET });
         dispatch(listModelDetails(match.params.id));
       }
@@ -82,34 +82,30 @@ const ModelAdminScreen = ({ history, match }) => {
             src={model.profileImage}
             alt={model.name}
             fluid
-            style={{ height: '150px' }}
+            style={{ height: '300px' }}
           />
           <h3>Other pictures:</h3>
           <Row>
             {model.images &&
               model.images.map((img) => (
-                <Col md={3}>
-                  <Image
-                    src={img}
-                    alt={model.name}
-                    fluid
-                    style={{ height: '150px' }}
-                  />
-                </Col>
+                <Image
+                  src={img}
+                  alt={model.name}
+                  fluid
+                  style={{ height: '300px', marginRight: 20, marginBottom: 20 }}
+                />
               ))}
           </Row>
           <h3>Nude pictures:</h3>
           <Row>
             {model.privateImages &&
               model.privateImages.map((img) => (
-                <Col md={3}>
-                  <Image
-                    src={img}
-                    alt={model.name}
-                    fluid
-                    style={{ height: '150px' }}
-                  />
-                </Col>
+                <Image
+                  src={img}
+                  alt={model.name}
+                  fluid
+                  style={{ height: '300px', marginRight: 20, marginBottom: 20 }}
+                />
               ))}
           </Row>
           <h3>Verification picture:</h3>
@@ -117,7 +113,7 @@ const ModelAdminScreen = ({ history, match }) => {
             src={model.verificationImage}
             alt={model.name}
             fluid
-            style={{ height: '150px' }}
+            style={{ height: '300px' }}
           />
 
           <h3>Reviews</h3>

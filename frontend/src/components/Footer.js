@@ -3,17 +3,26 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 const Footer = () => {
   return (
-    <footer>
+    <footer style={{ backgroundColor: '#343a40', color: 'white' }}>
       <Container>
         <Row>
           <Col className='text-center py-3'>
-            Copyright &copy; DinnerWithModels | <a href={'/'}>legal</a> |{' '}
-            <a href={'/'}>FAQ</a>
+            Copyright &copy; DinnerWithModels |{' '}
+            <a href={'/'} style={{ color: 'white' }}>
+              legal
+            </a>{' '}
+            |{' '}
+            <a href={'/'} style={{ color: 'white' }}>
+              FAQ
+            </a>
           </Col>
         </Row>
         <Row>
           <Col className='text-center'>
-            Designed by <a href={'/'}>Oto Effiong</a>
+            Designed by{' '}
+            <a href={'https://www.oto.com.ng/'} style={{ color: 'white' }}>
+              Oto Effiong
+            </a>
           </Col>
         </Row>
       </Container>

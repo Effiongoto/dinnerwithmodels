@@ -24,10 +24,15 @@ const Model = ({ model }) => {
         </Card.Title>
 
         <Card.Text as='div'>
-          <Rating value={model.rating} text={`${model.numReviews} reviews`} />
+          <Rating
+            value={model.rating}
+            text={`from ${model.numReviews} reviews`}
+          />
         </Card.Text>
 
         <Card.Text as='p'>
+          <strong>Gender: </strong>
+          {model.gender} <br></br>
           <strong>Location: </strong>
           {model.city}, {model.state}, {model.country}
         </Card.Text>

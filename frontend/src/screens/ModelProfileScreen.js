@@ -83,7 +83,7 @@ const ModelProfileScreen = ({ location, history }) => {
             src={model.profileImage}
             alt={model.name}
             fluid
-            style={{ height: '150px' }}
+            style={{ height: '300px', marginRight: 20, marginBottom: 20 }}
           />
           <h3>Other pictures:</h3>
           <Row>
@@ -94,7 +94,11 @@ const ModelProfileScreen = ({ location, history }) => {
                     src={img}
                     alt={model.name}
                     fluid
-                    style={{ height: '150px' }}
+                    style={{
+                      height: '300px',
+                      marginRight: 20,
+                      marginBottom: 20,
+                    }}
                   />
                 </Col>
               ))}
@@ -108,7 +112,11 @@ const ModelProfileScreen = ({ location, history }) => {
                     src={img}
                     alt={model.name}
                     fluid
-                    style={{ height: '150px' }}
+                    style={{
+                      height: '300px',
+                      marginRight: 20,
+                      marginBottom: 20,
+                    }}
                   />
                 </Col>
               ))}
@@ -118,7 +126,7 @@ const ModelProfileScreen = ({ location, history }) => {
             src={model.verificationImage}
             alt={model.name}
             fluid
-            style={{ height: '150px' }}
+            style={{ height: '300px', marginRight: 20, marginBottom: 20 }}
           />
 
           <h3>Reviews</h3>

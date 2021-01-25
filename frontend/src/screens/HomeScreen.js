@@ -56,7 +56,7 @@ const HomeScreen = ({ match, history }) => {
         ) : (
           <>
             <Col md={9}>
-              <h1 className='d-flex justify-content-center'>{heading}</h1>
+              <h1 style={{ fontFamily: 'Imbue' }}>{heading}</h1>
               <Row>
                 {models.map((model) => (
                   <Col key={model._id} sm={12} md={6} lg={4} xl={3}>
@@ -71,11 +71,10 @@ const HomeScreen = ({ match, history }) => {
               />
             </Col>
             <Col md={3}>
-              <h1>Twitter widget</h1>
               <TwitterTimelineEmbed
                 sourceType='profile'
                 screenName='saurabhnemade'
-                options={{ height: 400 }}
+                options={{ height: 600 }}
               />
             </Col>
           </>

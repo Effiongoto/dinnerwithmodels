@@ -15,7 +15,15 @@ const updateUserToPaid = asyncHandler(async (req, res) => {
 
     const updatedUser = await user.save();
 
-    res.json(updatedUser);
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      isSubscribed: updatedUser.isSubscribed,
+      modelsPaidFor: updatedUser.modelsPaidFor,
+      token: generateToken(updatedUser._id),
+    });
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -34,7 +42,15 @@ const updateUserToSubscribed = asyncHandler(async (req, res) => {
 
     const updatedUser = await user.save();
 
-    res.json(updatedUser);
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      isSubscribed: updatedUser.isSubscribed,
+      modelsPaidFor: updatedUser.modelsPaidFor,
+      token: generateToken(updatedUser._id),
+    });
   } else {
     res.status(404);
     throw new Error('User not found');

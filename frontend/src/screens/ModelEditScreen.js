@@ -14,7 +14,7 @@ import {
 const ModelEditScreen = ({ match, history }) => {
   const modelID = match.params.id;
 
-  const [username, setUsername] = useState('');
+  // const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [isVerified, setIsVerified] = useState(false);
 
@@ -52,7 +52,6 @@ const ModelEditScreen = ({ match, history }) => {
     } else {
       dispatch(listModelDetails(match.params.id));
       if (model.username) {
-        setUsername(model.username);
         setEmail(model.email);
         setIsVerified(model.isVerified);
       }
@@ -72,7 +71,6 @@ const ModelEditScreen = ({ match, history }) => {
     dispatch(
       updateModel({
         _id: modelID,
-        username,
         email,
         isVerified,
       })
@@ -94,7 +92,7 @@ const ModelEditScreen = ({ match, history }) => {
           <Message variant='danger'>{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
-            <Form.Group controlId='name'>
+            {/* <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type='name'
@@ -102,7 +100,7 @@ const ModelEditScreen = ({ match, history }) => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               ></Form.Control>
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group controlId='email'>
               <Form.Label>Email Address</Form.Label>
