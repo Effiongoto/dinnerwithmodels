@@ -16,10 +16,6 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('API is running...');
-});
-
 app.use('/api/models', modelRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/payment', paymentRoutes);
@@ -33,7 +29,7 @@ app.get('/api/config/paystack', (req, res) =>
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'development') {
   app.use(express.static(path.join(__dirname, '/frontend/build')));
 
   app.get('*', (req, res) =>
