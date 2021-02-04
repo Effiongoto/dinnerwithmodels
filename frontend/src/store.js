@@ -1,6 +1,6 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'; //createStore to create the store, applyMiddleware to be able to use thunks and other middlewares
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { createStore, combineReducers, applyMiddleware } from "redux"; //createStore to create the store, applyMiddleware to be able to use thunks and other middlewares
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 import {
   modelListReducer,
   modelAllReducer,
@@ -11,7 +11,7 @@ import {
   modelDeleteReducer,
   modelUpdateReducer,
   modelReviewCreateReducer,
-} from './reducers/modelReducers';
+} from "./reducers/modelReducers";
 import {
   userLoginReducer,
   userRegisterReducer,
@@ -22,7 +22,12 @@ import {
   userUpdateReducer,
   userPayReducer,
   userSubscribeReducer,
-} from './reducers/userReducers';
+} from "./reducers/userReducers";
+import {
+  createPlanReducer,
+  planDeleteReducer,
+  planListReducer,
+} from "./reducers/paymentReducers";
 
 const reducer = combineReducers({
   modelList: modelListReducer,
@@ -43,14 +48,17 @@ const reducer = combineReducers({
   userUpdate: userUpdateReducer,
   userPay: userPayReducer,
   userSubscribe: userSubscribeReducer,
+  createPlan: createPlanReducer,
+  planList: planListReducer,
+  planDelete: planDeleteReducer,
 });
 
-const userInfoFromStorage = localStorage.getItem('userInfo')
-  ? JSON.parse(localStorage.getItem('userInfo'))
+const userInfoFromStorage = localStorage.getItem("userInfo")
+  ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
-const modelInfoFromStorage = localStorage.getItem('modelInfo')
-  ? JSON.parse(localStorage.getItem('modelInfo'))
+const modelInfoFromStorage = localStorage.getItem("modelInfo")
+  ? JSON.parse(localStorage.getItem("modelInfo"))
   : null;
 
 const initialState = {

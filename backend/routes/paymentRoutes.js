@@ -1,12 +1,28 @@
-import express from 'express';
+import express from "express";
 const router = express.Router();
 import {
   updateUserToPaid,
   updateUserToSubscribed,
-} from '../controllers/paymentController.js';
-import { protect, admin } from '../middleware/authMiddleware.js';
+} from "../controllers/paymentController.js";
+import {
+  createPlan,
+  deletePlan,
+  getPlanById,
+  getPlans,
+  updatePlan,
+} from "../controllers/planController.js";
+import { protect, admin } from "../middleware/authMiddleware.js";
 
-router.route('/:id/pay').put(protect, updateUserToPaid);
-router.route('/:id/subscribe').put(protect, updateUserToSubscribed);
+router.route("/:id/pay").put(protect, updateUserToPaid);
+router.route("/:id/subscribe").put(protect, updateUserToSubscribed);
+router
+  .route("/plans")
+  .get(protect, admin, getPlans)
+  .post(protect, admin, createPlan);
+router
+  .route("/plans/:id")
+  .get(protect, admin, getPlanById)
+  .patch(protect, admin, updatePlan)
+  .delete(protect, admin, deletePlan);
 
 export default router;
