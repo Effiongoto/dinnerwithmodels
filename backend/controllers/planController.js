@@ -52,7 +52,7 @@ const updatePlan = asyncHandler(async (req, res) => {
     req.params.id,
     {
       $set: req.body,
-    }).exec();
+    }, {new: true}).exec();
 
   if (plan) {
     res.json(plan);

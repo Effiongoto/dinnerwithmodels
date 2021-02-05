@@ -189,7 +189,7 @@ const UserEditScreen = ({ match, history }) => {
             </Form.Group>
             </Form.Row>
 
-            <Form.Group controlId="modelsPaidFor">
+            <Form.Group>
               <Form.Label>Models Paid For</Form.Label>
               <Form.Control value={user.modelsPaidFor} readOnly></Form.Control>
             </Form.Group>

@@ -34,7 +34,6 @@ const PaymentScreen = ({ match, history }) => {
 
   const onSuccess = (reference) => {
     // add model.username to users array
-    console.log(reference);
     dispatch(userPay(userId, modelUsername, reference));
     alert('Payment Successful');
     history.push(`/model/${model._id}`);

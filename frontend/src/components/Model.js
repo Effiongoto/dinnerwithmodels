@@ -19,7 +19,7 @@ const Model = ({ model }) => {
           </Link>
           <p className='top'>
             Verified{' '}
-            <i class='fas fa-check-square' style={{ color: 'green' }}></i>
+            <i className='fas fa-check-square' style={{ color: 'green' }}></i>
           </p>
         </Card.Title>
 
