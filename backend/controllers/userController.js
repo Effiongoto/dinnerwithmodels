@@ -166,7 +166,8 @@ const updateUser = asyncHandler(async (req, res) => {
     ) {
       user.modelsPaidFor = user.modelsPaidFor;
     } else if (req.body.modelsPaidFor) {
-      user.modelsPaidFor = [...user.modelsPaidFor, req.body.modelsPaidFor];
+      user.modelsPaidFor = req.body.modelsPaidFor
+      // user.modelsPaidFor = [...user.modelsPaidFor, req.body.modelsPaidFor];
     } else {
       user.modelsPaidFor = user.modelsPaidFor;
     }

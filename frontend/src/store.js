@@ -26,7 +26,9 @@ import {
 import {
   createPlanReducer,
   planDeleteReducer,
+  planDetailsReducer,
   planListReducer,
+  planUpdateReducer,
 } from "./reducers/paymentReducers";
 
 const reducer = combineReducers({
@@ -51,6 +53,8 @@ const reducer = combineReducers({
   createPlan: createPlanReducer,
   planList: planListReducer,
   planDelete: planDeleteReducer,
+  planDetails: planDetailsReducer,
+  planUpdate: planUpdateReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

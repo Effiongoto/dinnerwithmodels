@@ -2,15 +2,15 @@ import {
   ADMIN_CREATE_PLAN_FAIL,
   ADMIN_CREATE_PLAN_REQUEST,
   ADMIN_CREATE_PLAN_SUCCESS,
-  //   ADMIN_UPDATE_PLAN_FAIL,
-  //   ADMIN_UPDATE_PLAN_REQUEST,
-  //   ADMIN_UPDATE_PLAN_SUCCESS,
+  ADMIN_UPDATE_PLAN_FAIL,
+  ADMIN_UPDATE_PLAN_REQUEST,
+  ADMIN_UPDATE_PLAN_SUCCESS,
   ADMIN_DELETE_PLAN_FAIL,
   ADMIN_DELETE_PLAN_REQUEST,
   ADMIN_DELETE_PLAN_SUCCESS,
-  //   ADMIN_PLAN_DETAILS_FAIL,
-  //   ADMIN_PLAN_DETAILS_REQUEST,
-  //   ADMIN_PLAN_DETAILS_SUCCESS,
+  ADMIN_PLAN_DETAILS_FAIL,
+  ADMIN_PLAN_DETAILS_REQUEST,
+  ADMIN_PLAN_DETAILS_SUCCESS,
   PLAN_LIST_FAIL,
   PLAN_LIST_REQUEST,
   PLAN_LIST_SUCCESS,
@@ -49,6 +49,32 @@ export const planDeleteReducer = (state = {}, action) => {
     case ADMIN_DELETE_PLAN_SUCCESS:
       return { loading: false, success: true };
     case ADMIN_DELETE_PLAN_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const planDetailsReducer = (state = { plan: {} }, action) => {
+  switch (action.type) {
+    case ADMIN_PLAN_DETAILS_REQUEST:
+      return { ...state, loading: true };
+    case ADMIN_PLAN_DETAILS_SUCCESS:
+      return { loading: false, plan: action.payload };
+    case ADMIN_PLAN_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const planUpdateReducer = (state = { plan: {} }, action) => {
+  switch (action.type) {
+    case ADMIN_UPDATE_PLAN_REQUEST:
+      return { loading: true };
+    case ADMIN_UPDATE_PLAN_SUCCESS:
+      return { loading: false, success: true };
+    case ADMIN_UPDATE_PLAN_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

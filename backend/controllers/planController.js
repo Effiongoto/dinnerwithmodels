@@ -52,20 +52,12 @@ const updatePlan = asyncHandler(async (req, res) => {
     req.params.id,
     {
       $set: req.body,
-    },
-    (err) => {
-      if (!err) {
-        res.json(plan);
-      } else {
-        res.status(404);
-        throw new Error("Plan update failed");
-      }
-    }
-  );
-  // res.json(plan);
+    }).exec();
 
-  if (!plan) {
-    res.status(400);
+  if (plan) {
+    res.json(plan);
+  } else {
+    res.status(404);
     throw new Error("Plan not found");
   }
 });

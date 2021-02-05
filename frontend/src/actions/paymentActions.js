@@ -9,6 +9,12 @@ import {
   ADMIN_DELETE_PLAN_FAIL,
   ADMIN_DELETE_PLAN_REQUEST,
   ADMIN_DELETE_PLAN_SUCCESS,
+  ADMIN_PLAN_DETAILS_FAIL,
+  ADMIN_PLAN_DETAILS_REQUEST,
+  ADMIN_PLAN_DETAILS_SUCCESS,
+  ADMIN_UPDATE_PLAN_FAIL,
+  ADMIN_UPDATE_PLAN_REQUEST,
+  ADMIN_UPDATE_PLAN_SUCCESS,
 } from "../constants/paymentConstants";
 
 export const createPlan = (plan) => async (dispatch, getState) => {
@@ -32,6 +38,7 @@ export const createPlan = (plan) => async (dispatch, getState) => {
       .post(`https://api.paystack.co/plan`, plan, {
         headers: {
           Authorization: `Bearer sk_test_02c6bf4338249786fecffb3cb1ba9ce59e1efe67`,
+          "Content-Type": "application/json",
         },
       })
       .then(async (res) => {
@@ -112,12 +119,94 @@ export const deletePlan = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`/api/payment/plans/${id}`, config).then(() => dispatch(listPlans()));
+    await axios
+      .delete(`/api/payment/plans/${id}`, config)
+      .then(() => dispatch(listPlans()));
 
     dispatch({ type: ADMIN_DELETE_PLAN_SUCCESS });
   } catch (error) {
     dispatch({
       type: ADMIN_DELETE_PLAN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getPlanDetails = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ADMIN_PLAN_DETAILS_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/payment/plans/${id}`, config);
+
+    dispatch({
+      type: ADMIN_PLAN_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_PLAN_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updatePlan = (plan) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ADMIN_UPDATE_PLAN_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios
+      .put(
+        `https://api.paystack.co/plan/${plan.planCode}`,
+        { name: plan.name, amount: plan.amount },
+        {
+          headers: {
+            Authorization: `Bearer sk_test_02c6bf4338249786fecffb3cb1ba9ce59e1efe67`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(async (res) => {
+        console.log(res);
+        if (res.data.status === true) {
+          await axios.patch(`/api/payment/plans/${plan._id}`, plan, config);
+
+          dispatch({ type: ADMIN_UPDATE_PLAN_SUCCESS });
+        }
+      });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_UPDATE_PLAN_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
