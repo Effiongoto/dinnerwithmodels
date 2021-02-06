@@ -76,7 +76,7 @@ const UserEditScreen = ({ match, history }) => {
             name !== "isSubscribed"
               ? user.isSubscribed.status
               : name === "isSubscribed" && checked === true
-              ? "active"
+              ? "error"
               : "inactive",
         },
       };
