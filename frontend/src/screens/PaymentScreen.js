@@ -29,13 +29,12 @@ const PaymentScreen = ({ match, history }) => {
     reference: new Date().getTime(),
     email: userInfo.email,
     amount: 500000,
-    publicKey: 'pk_test_200da91da06a7902d46b588b64178b1fccd11635',
+    publicKey: 'pk_test_7250bd18e57430aaebba6f3b2a370286dabf0656',
   };
 
   const onSuccess = (reference) => {
     // add model.username to users array
-    console.log(reference);
-    dispatch(userPay(userId, modelUsername));
+    dispatch(userPay(userId, modelUsername, reference));
     alert('Payment Successful');
     history.push(`/model/${model._id}`);
   };

@@ -68,7 +68,7 @@ const UserListScreen = ({ history }) => {
                   )}
                 </td>
                 <td>
-                  {user.isSubscribed ? (
+                  {user.isSubscribed && user.isSubscribed.status === "active" ? (
                     <i className='fas fa-check' style={{ color: 'green' }}></i>
                   ) : (
                     <i className='fas fa-times' style={{ color: 'red' }}></i>

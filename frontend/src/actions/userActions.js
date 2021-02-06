@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   USER_DELETE_FAIL,
   USER_DELETE_SUCCESS,
@@ -30,7 +30,7 @@ import {
   USER_SUBSCRIBE_REQUEST,
   USER_SUBSCRIBE_SUCCESS,
   USER_SUBSCRIBE_FAIL,
-} from '../constants/userConstants';
+} from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -40,12 +40,12 @@ export const login = (email, password) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
 
     const { data } = await axios.post(
-      '/api/users/login',
+      "/api/users/login",
       { email, password },
       config
     );
@@ -55,7 +55,7 @@ export const login = (email, password) => async (dispatch) => {
       payload: data,
     });
 
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
@@ -68,7 +68,7 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
-  localStorage.removeItem('userInfo');
+  localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_RESET });
   dispatch({ type: USER_LIST_RESET });
@@ -82,12 +82,12 @@ export const register = (name, email, password) => async (dispatch) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     };
 
     const { data } = await axios.post(
-      '/api/users',
+      "/api/users",
       { name, email, password },
       config
     );
@@ -102,7 +102,7 @@ export const register = (name, email, password) => async (dispatch) => {
       payload: data,
     });
 
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
@@ -126,7 +126,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -160,7 +160,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -177,7 +177,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       payload: data,
     });
 
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,
@@ -264,12 +264,12 @@ export const updateUser = (user) => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
-    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
+    const { data } = await axios.patch(`/api/users/${user._id}`, user, config);
 
     dispatch({ type: USER_UPDATE_SUCCESS });
 
@@ -285,7 +285,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
   }
 };
 
-export const userPay = (userId, modelUsername) => async (
+export const userPay = (userId, modelUsername, reference) => async (
   dispatch,
   getState
 ) => {
@@ -300,28 +300,42 @@ export const userPay = (userId, modelUsername) => async (
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
-    const { data } = await axios.put(
-      `/api/payment/${userId}/pay`,
-      modelUsername,
-      config
-    );
+    axios
+      .get(
+        `https://api.paystack.co/transaction/verify/${reference.reference}`,
+        {
+          headers: {
+            Authorization: `Bearer sk_test_02c6bf4338249786fecffb3cb1ba9ce59e1efe67`,
+          },
+        }
+      )
+      .then(async (res) => {
+        if (res.data.message === "Verification successful") {
+          const { data } = await axios.put(
+            `/api/payment/${userId}/pay`,
+            modelUsername,
+            config
+          );
+          console.log("data", data);
 
-    dispatch({
-      type: USER_PAY_SUCCESS,
-      payload: data,
-    });
+          dispatch({
+            type: USER_PAY_SUCCESS,
+            payload: data,
+          });
 
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    });
+          dispatch({
+            type: USER_LOGIN_SUCCESS,
+            payload: data,
+          });
 
-    localStorage.setItem('userInfo', JSON.stringify(data));
+          localStorage.setItem("userInfo", JSON.stringify(data));
+        }
+      });
   } catch (error) {
     dispatch({
       type: USER_PAY_FAIL,
@@ -333,7 +347,10 @@ export const userPay = (userId, modelUsername) => async (
   }
 };
 
-export const userSubscribe = (userId) => async (dispatch, getState) => {
+export const userSubscribe = (id) => async (
+  dispatch,
+  getState
+) => {
   try {
     dispatch({
       type: USER_SUBSCRIBE_REQUEST,
@@ -343,15 +360,18 @@ export const userSubscribe = (userId) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
+    const {subCreate: {sub}} = getState();
+
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
-    const { data } = await axios.put(
-      `/api/payment/${userId}/subscribe`,
+    const { data } = await axios.patch(
+      `/api/payment/${id}/subscribe`,
+      { isSubscribed: { status: sub.status, subCode: sub.subCode, emailToken: sub.emailToken } },
       config
     );
 
@@ -365,7 +385,7 @@ export const userSubscribe = (userId) => async (dispatch, getState) => {
       payload: data,
     });
 
-    localStorage.setItem('userInfo', JSON.stringify(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_SUBSCRIBE_FAIL,

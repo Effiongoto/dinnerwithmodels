@@ -1,6 +1,6 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'; //createStore to create the store, applyMiddleware to be able to use thunks and other middlewares
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { createStore, combineReducers, applyMiddleware } from "redux"; //createStore to create the store, applyMiddleware to be able to use thunks and other middlewares
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 import {
   modelListReducer,
   modelAllReducer,
@@ -11,7 +11,7 @@ import {
   modelDeleteReducer,
   modelUpdateReducer,
   modelReviewCreateReducer,
-} from './reducers/modelReducers';
+} from "./reducers/modelReducers";
 import {
   userLoginReducer,
   userRegisterReducer,
@@ -22,7 +22,21 @@ import {
   userUpdateReducer,
   userPayReducer,
   userSubscribeReducer,
-} from './reducers/userReducers';
+} from "./reducers/userReducers";
+import {
+  createPlanReducer,
+  planDeleteReducer,
+  planDetailsReducer,
+  planListReducer,
+  planUpdateReducer,
+} from "./reducers/paymentReducers";
+import {
+  createSubReducer,
+  subDetailsReducer,
+  subDisableReducer,
+  subEnableReducer,
+  subListReducer,
+} from "./reducers/subscriptionReducers";
 
 const reducer = combineReducers({
   modelList: modelListReducer,
@@ -43,14 +57,24 @@ const reducer = combineReducers({
   userUpdate: userUpdateReducer,
   userPay: userPayReducer,
   userSubscribe: userSubscribeReducer,
+  planCreate: createPlanReducer,
+  planList: planListReducer,
+  planDelete: planDeleteReducer,
+  planDetails: planDetailsReducer,
+  planUpdate: planUpdateReducer,
+  subCreate: createSubReducer,
+  subList: subListReducer,
+  subDetails: subDetailsReducer,
+  subEnable: subEnableReducer,
+  subDisable: subDisableReducer,
 });
 
-const userInfoFromStorage = localStorage.getItem('userInfo')
-  ? JSON.parse(localStorage.getItem('userInfo'))
+const userInfoFromStorage = localStorage.getItem("userInfo")
+  ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
-const modelInfoFromStorage = localStorage.getItem('modelInfo')
-  ? JSON.parse(localStorage.getItem('modelInfo'))
+const modelInfoFromStorage = localStorage.getItem("modelInfo")
+  ? JSON.parse(localStorage.getItem("modelInfo"))
   : null;
 
 const initialState = {
