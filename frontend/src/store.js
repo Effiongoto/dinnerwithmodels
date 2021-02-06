@@ -30,6 +30,13 @@ import {
   planListReducer,
   planUpdateReducer,
 } from "./reducers/paymentReducers";
+import {
+  createSubReducer,
+  subDetailsReducer,
+  subDisableReducer,
+  subEnableReducer,
+  subListReducer,
+} from "./reducers/subscriptionReducers";
 
 const reducer = combineReducers({
   modelList: modelListReducer,
@@ -50,11 +57,16 @@ const reducer = combineReducers({
   userUpdate: userUpdateReducer,
   userPay: userPayReducer,
   userSubscribe: userSubscribeReducer,
-  createPlan: createPlanReducer,
+  planCreate: createPlanReducer,
   planList: planListReducer,
   planDelete: planDeleteReducer,
   planDetails: planDetailsReducer,
   planUpdate: planUpdateReducer,
+  subCreate: createSubReducer,
+  subList: subListReducer,
+  subDetails: subDetailsReducer,
+  subEnable: subEnableReducer,
+  subDisable: subDisableReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

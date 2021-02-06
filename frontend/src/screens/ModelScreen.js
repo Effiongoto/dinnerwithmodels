@@ -107,7 +107,7 @@ const ModelScreen = ({ match, history }) => {
           </p>
 
           <h3>Nude Pictures:</h3>
-          {userInfo && userInfo.isSubscribed ? (
+          {userInfo && userInfo.isSubscribed && userInfo.isSubscribed.status === "active" ? (
             <Row>
               {model.privateImages &&
                 model.privateImages.map((img) => (

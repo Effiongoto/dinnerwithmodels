@@ -3,31 +3,26 @@ import mongoose from 'mongoose';
 const subscriptionSchema = mongoose.Schema(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Object,
       required: true,
-      ref: 'User',
     },
-    paymentMethod: {
+    subCode: {
       type: String,
       required: true,
     },
-    paymentResult: {
-      id: { type: String },
-      status: { type: String },
-      update_time: { type: String },
-      email_address: { type: String },
+    emailToken: {
+      type: String,
+      required: true,
     },
-    price: {
+    amount: {
       type: Number,
       required: true,
-      default: 0.0,
     },
-    isPaid: {
-      type: Boolean,
+    status: {
+      type: String,
       required: true,
-      default: false,
     },
-    paidAt: {
+    createdAt: {
       type: Date,
     },
   },

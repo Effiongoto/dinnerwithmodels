@@ -269,7 +269,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
+    const { data } = await axios.patch(`/api/users/${user._id}`, user, config);
 
     dispatch({ type: USER_UPDATE_SUCCESS });
 
@@ -347,7 +347,7 @@ export const userPay = (userId, modelUsername, reference) => async (
   }
 };
 
-export const userSubscribe = (email, planCode, reference) => async (
+export const userSubscribe = (id) => async (
   dispatch,
   getState
 ) => {
@@ -360,6 +360,8 @@ export const userSubscribe = (email, planCode, reference) => async (
       userLogin: { userInfo },
     } = getState();
 
+    const {subCreate: {sub}} = getState();
+
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -367,65 +369,23 @@ export const userSubscribe = (email, planCode, reference) => async (
       },
     };
 
-    axios
-      .get(
-        `https://api.paystack.co/transaction/verify/${reference.reference}`,
-        {
-          headers: {
-            Authorization: `Bearer sk_test_02c6bf4338249786fecffb3cb1ba9ce59e1efe67`,
-          },
-        }
-      )
-      .then(async (res) => {
-        if (res.data.message === "Verification successful") {
-          axios
-            .post(
-              `https://api.paystack.co/subscription`,
-              { customer: email, plan: planCode },
-              {
-                headers: {
-                  Authorization: `Bearer sk_test_02c6bf4338249786fecffb3cb1ba9ce59e1efe67`,
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-            .then(async (res) => {
-              const { data } = await axios.patch(
-                `/api/payment/${userInfo._id}/subscribe`,{isSubscribed: {status: res.data.status, subscriptionCode: res.data.data.subscription_code}},
-                config
-              );
+    const { data } = await axios.patch(
+      `/api/payment/${id}/subscribe`,
+      { isSubscribed: { status: sub.status, subCode: sub.subCode, emailToken: sub.emailToken } },
+      config
+    );
 
-              dispatch({
-                type: USER_SUBSCRIBE_SUCCESS,
-                payload: data,
-              });
-          
-              dispatch({
-                type: USER_LOGIN_SUCCESS,
-                payload: data,
-              });
-          
-              localStorage.setItem("userInfo", JSON.stringify(data));
-            });
-        }
-      });
+    dispatch({
+      type: USER_SUBSCRIBE_SUCCESS,
+      payload: data,
+    });
 
-    // const { data } = await axios.put(
-    //   `/api/payment/${userInfo._id}/subscribe`,
-    //   config
-    // );
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
 
-    // dispatch({
-    //   type: USER_SUBSCRIBE_SUCCESS,
-    //   payload: data,
-    // });
-
-    // dispatch({
-    //   type: USER_LOGIN_SUCCESS,
-    //   payload: data,
-    // });
-
-    // localStorage.setItem("userInfo", JSON.stringify(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_SUBSCRIBE_FAIL,

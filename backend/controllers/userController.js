@@ -150,46 +150,59 @@ const getUserById = asyncHandler(async (req, res) => {
 });
 
 // @desc    Update user
-// @route   PUT /api/users/:id
+// @route   PATCH /api/users/:id
 // @access  Private/Admin
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    {$set: req.body},
+    {new: true}
+  ).exec();
 
   if (user) {
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.isAdmin = req.body.isAdmin;
-    user.isSubscribed = req.body.isSubscribed;
-    if (
-      req.body.modelsPaidFor &&
-      user.modelsPaidFor.find((x) => x === req.body.modelsPaidFor)
-    ) {
-      user.modelsPaidFor = user.modelsPaidFor;
-    } else if (req.body.modelsPaidFor) {
-      user.modelsPaidFor = req.body.modelsPaidFor
-      // user.modelsPaidFor = [...user.modelsPaidFor, req.body.modelsPaidFor];
-    } else {
-      user.modelsPaidFor = user.modelsPaidFor;
-    }
-    if (req.body.password) {
-      //makelowercase here or in ModelScreen
-      user.password = req.body.password;
-    }
-
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      isSubscribed: updatedUser.isSubscribed,
-      modelsPaidFor: updatedUser.modelsPaidFor,
-    });
+    res.json(user);
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
+
+  // const user = await User.findById(req.params.id);
+
+  // if (user) {
+  //   user.name = req.body.name || user.name;
+  //   user.email = req.body.email || user.email;
+  //   user.isAdmin = req.body.isAdmin;
+  //   user.isSubscribed = req.body.isSubscribed;
+  //   if (
+  //     req.body.modelsPaidFor &&
+  //     user.modelsPaidFor.find((x) => x === req.body.modelsPaidFor)
+  //   ) {
+  //     user.modelsPaidFor = user.modelsPaidFor;
+  //   } else if (req.body.modelsPaidFor) {
+  //     user.modelsPaidFor = req.body.modelsPaidFor
+  //     // user.modelsPaidFor = [...user.modelsPaidFor, req.body.modelsPaidFor];
+  //   } else {
+  //     user.modelsPaidFor = user.modelsPaidFor;
+  //   }
+  //   if (req.body.password) {
+  //     //makelowercase here or in ModelScreen
+  //     user.password = req.body.password;
+  //   }
+
+  //   const updatedUser = await user.save();
+
+  //   res.json({
+  //     _id: updatedUser._id,
+  //     name: updatedUser.name,
+  //     email: updatedUser.email,
+  //     isAdmin: updatedUser.isAdmin,
+  //     isSubscribed: updatedUser.isSubscribed,
+  //     modelsPaidFor: updatedUser.modelsPaidFor,
+  //   });
+  // } else {
+  //   res.status(404);
+  //   throw new Error('User not found');
+  // }
 });
 
 export {

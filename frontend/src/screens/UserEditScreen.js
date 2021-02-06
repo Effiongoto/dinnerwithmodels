@@ -11,6 +11,7 @@ import {
   USER_DETAILS_RESET,
 } from "../constants/userConstants";
 import { listAllModels } from "../actions/modelActions";
+import { disableSub, enableSub, getSubDetails } from "../actions/subscriptionActions";
 
 const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id;
@@ -39,6 +40,9 @@ const UserEditScreen = ({ match, history }) => {
   const modelAll = useSelector((state) => state.modelAll);
   const { models } = modelAll;
 
+  const subDetails = useSelector((state) => state.subDetails);
+  const {sub} = subDetails;
+
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: USER_UPDATE_RESET });
@@ -49,7 +53,7 @@ const UserEditScreen = ({ match, history }) => {
         dispatch(getUserDetails(userId));
         dispatch(listAllModels());
       } else {
-        setUser(userDetail);
+        setUser({...userDetail});
       }
     }
   }, [dispatch, history, userId, userDetail, successUpdate]);
@@ -63,8 +67,21 @@ const UserEditScreen = ({ match, history }) => {
   const handleCheck = (event) => {
     const { name, checked } = event.target;
     setUser((prevValue) => {
-      return { ...prevValue, [name]: checked };
+      return {
+        ...prevValue,
+        [name]: checked,
+        isSubscribed: {
+          ...userDetail.isSubscribed,
+          status:
+            name !== "isSubscribed"
+              ? user.isSubscribed.status
+              : name === "isSubscribed" && checked === true
+              ? "active"
+              : "inactive",
+        },
+      };
     });
+    dispatch(getSubDetails(user.isSubscribed.subCode));
   };
   const addToModelArray = (event) => {
     const { name, value } = event.target;
@@ -76,18 +93,24 @@ const UserEditScreen = ({ match, history }) => {
     });
   };
 
-  const removeFromModelArray= (event) => {
-    const {name, value} = event.target;
+  const removeFromModelArray = (event) => {
+    const { name, value } = event.target;
     setUser((prevValue) => {
       return {
         ...prevValue,
-        [name]: [...new Set([...prevValue.modelsPaidFor, value])].filter((el) => el !== value)
-      }
-    })
-  }
+        [name]: [...new Set([...prevValue.modelsPaidFor, value])].filter(
+          (el) => el !== value
+        ),
+      };
+    });
+  };
 
   const submitHandler = (e) => {
-    dispatch(updateUser(user));
+    if (user.isSubscribed.status === "active") {
+      dispatch(enableSub({code: sub.subCode, token: sub.emailToken}, sub._id, user));
+    } else if (user.isSubscribed.status === "inactive") {
+      dispatch(disableSub({code: sub.subCode, token: sub.emailToken}, sub._id, user));
+    }
     e.preventDefault();
   };
 
@@ -140,53 +163,53 @@ const UserEditScreen = ({ match, history }) => {
             </Form.Group>
 
             <Form.Row>
-            <Form.Group as={Col}>
-              <Form.Label>Add to Models Paid For</Form.Label>
-              <Form.Control
-                as="select"
-                name="modelsPaidFor"
-                value={user.modelsPaidFor}
-                onChange={addToModelArray}
-              >
-                <option value="">Select Models ...</option>
-                {models &&
-                  models
-                    .filter((model) =>
-                      !user.modelsPaidFor.includes(model.username)
-                    )
-                    .map((model) => {
-                      return (
-                        <option key={model._id} value={model.name}>
-                          {model.username}
-                        </option>
-                      );
-                    })}
-              </Form.Control>
-            </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Label>Add to Models Paid For</Form.Label>
+                <Form.Control
+                  as="select"
+                  name="modelsPaidFor"
+                  value={user.modelsPaidFor}
+                  onChange={addToModelArray}
+                >
+                  <option value="">Select Models ...</option>
+                  {models &&
+                    models
+                      .filter(
+                        (model) => !user.modelsPaidFor.includes(model.username)
+                      )
+                      .map((model) => {
+                        return (
+                          <option key={model._id} value={model.name}>
+                            {model.username}
+                          </option>
+                        );
+                      })}
+                </Form.Control>
+              </Form.Group>
 
-            <Form.Group as={Col}>
-              <Form.Label>Remove from Models Paid For</Form.Label>
-              <Form.Control
-                as="select"
-                name="modelsPaidFor"
-                value={user.modelsPaidFor}
-                onChange={removeFromModelArray}
-              >
-                <option value="">Select Models Paid For ...</option>
-                {models &&
-                  models
-                    .filter((model) =>
-                      user.modelsPaidFor.includes(model.username)
-                    )
-                    .map((model) => {
-                      return (
-                        <option key={model._id} value={model.name}>
-                          {model.username}
-                        </option>
-                      );
-                    })}
-              </Form.Control>
-            </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Label>Remove from Models Paid For</Form.Label>
+                <Form.Control
+                  as="select"
+                  name="modelsPaidFor"
+                  value={user.modelsPaidFor}
+                  onChange={removeFromModelArray}
+                >
+                  <option value="">Select Models Paid For ...</option>
+                  {models &&
+                    models
+                      .filter((model) =>
+                        user.modelsPaidFor.includes(model.username)
+                      )
+                      .map((model) => {
+                        return (
+                          <option key={model._id} value={model.name}>
+                            {model.username}
+                          </option>
+                        );
+                      })}
+                </Form.Control>
+              </Form.Group>
             </Form.Row>
 
             <Form.Group>
@@ -198,7 +221,7 @@ const UserEditScreen = ({ match, history }) => {
               <Form.Check
                 type="checkbox"
                 label="Is Subscribed"
-                checked={user.isSubscribed}
+                checked={user.isSubscribed && user.isSubscribed.status === "active" ? true : false}
                 name="isSubscribed"
                 onChange={handleCheck}
                 value={user.isSubscribed}
