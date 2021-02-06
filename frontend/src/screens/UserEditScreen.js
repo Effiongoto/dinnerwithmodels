@@ -11,7 +11,7 @@ import {
   USER_DETAILS_RESET,
 } from "../constants/userConstants";
 import { listAllModels } from "../actions/modelActions";
-import { disableSub, enableSub, getSubDetails } from "../actions/subscriptionActions";
+import { disableSub, getSubDetails } from "../actions/subscriptionActions";
 
 const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id;
@@ -76,7 +76,7 @@ const UserEditScreen = ({ match, history }) => {
             name !== "isSubscribed"
               ? user.isSubscribed.status
               : name === "isSubscribed" && checked === true
-              ? "error"
+              ? "null"
               : "inactive",
         },
       };
@@ -106,8 +106,8 @@ const UserEditScreen = ({ match, history }) => {
   };
 
   const submitHandler = (e) => {
-    if (user.isSubscribed.status === "active") {
-      dispatch(enableSub({code: sub.subCode, token: sub.emailToken}, sub._id, user));
+    if (user.isSubscribed.status === "null") {
+      dispatch(updateUser(user))
     } else if (user.isSubscribed.status === "inactive") {
       dispatch(disableSub({code: sub.subCode, token: sub.emailToken}, sub._id, user));
     }
@@ -221,7 +221,7 @@ const UserEditScreen = ({ match, history }) => {
               <Form.Check
                 type="checkbox"
                 label="Is Subscribed"
-                checked={user.isSubscribed && user.isSubscribed.status === "active" ? true : false}
+                checked={user.isSubscribed && user.isSubscribed.status === "null" ? true : false}
                 name="isSubscribed"
                 onChange={handleCheck}
                 value={user.isSubscribed}
