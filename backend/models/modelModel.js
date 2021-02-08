@@ -87,6 +87,12 @@ const modelSchema = mongoose.Schema(
     profileImage: {
       type: String,
     },
+    watermarkImage: {
+      type: String
+    },
+    watermarkText: {
+      type: String
+    },
     images: {
       type: Array,
     },

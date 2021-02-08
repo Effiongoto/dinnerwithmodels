@@ -1,11 +1,14 @@
-import path from 'path';
-import express from 'express';
-import multer from 'multer';
+import path from "path";
+import express from "express";
+import multer from "multer";
+import jimp from "jimp";
+import watermark from "jimp-watermark";
+import Model from "../models/modelModel.js";
 const router = express.Router();
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, "uploads/");
   },
   filename(req, file, cb) {
     cb(
@@ -23,7 +26,7 @@ function checkFileType(file, cb) {
   if (extname && mimetype) {
     return cb(null, true);
   } else {
-    cb('Images only!');
+    cb("Images only!", false);
   }
 }
 
@@ -34,7 +37,44 @@ const upload = multer({
   },
 });
 
-router.post('/', upload.single('image'), (req, res) => {
+router.post("/", upload.single("image"), async (req, res) => {
+  if (req.body.name.includes("private")) {
+    const model = await Model.findById(req.body.id).exec();
+    if (model.watermarkImage) {
+      watermark.addWatermark(
+        req.file.path,
+        `${path.resolve()}${model.watermarkImage}`,
+        {
+          ratio: 0.2,
+          opacity: 0.2,
+          dstPath: req.file.path,
+        }
+      );
+    } else if (model.watermarkText) {
+      console.log("text", model.watermarkText);
+      watermark.addTextWatermark(req.file.path, {
+        text: model.watermarkText,
+        textSize: 6,
+        dstPath: req.file.path,
+      });
+    } else {
+      console.log("sike!");
+    }
+    
+  }
+  // jimp
+  //   .read(req.file.path)
+  //   .then((tpl) =>
+  //     jimp
+  //       .read("uploads/932-9328480_apples-png-image-red-apple-fruit.png")
+  //       .then((logoTpl) => {
+  //         logoTpl.opacity(0.5);
+  //         return tpl.composite(logoTpl, 512, 512, [
+  //           jimp.BLEND_DESTINATION_OVER,
+  //         ]);
+  //       })
+  //   )
+  //   .then((tpl) => tpl.write(req.file.path));
   res.send(`/${req.file.path}`);
 });
 

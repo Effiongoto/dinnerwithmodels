@@ -130,9 +130,9 @@ const ModelProfileScreen = ({ location, history }) => {
           />
 
           <h3>Reviews</h3>
-          {model.reviews.length === 0 && <Message>No Reviews</Message>}
+          {model.reviews && model.reviews.length === 0 && <Message>No Reviews</Message>}
           <ListGroup variant='flush'>
-            {model.reviews.map((review) => (
+            {model.reviews && model.reviews.map((review) => (
               <ListGroup.Item key={review._id}>
                 <strong>{review.name}</strong>
                 <Rating value={review.rating} />
