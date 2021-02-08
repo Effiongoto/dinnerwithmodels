@@ -29,8 +29,8 @@ router
   .patch(protect, admin, updatePlan)
   .delete(protect, admin, deletePlan);
 router.route("/subscriptions").get(protect, getSubs).post(protect, createSub);
-router.route("/subscriptions/:id").get(protect, admin, getSubById);
+router.route("/subscriptions/:id").get(protect, getSubById);
 router.route("/subscriptions/:id/enable").patch(protect, admin, enableSub);
-router.route("/subscriptions/:id/disable").patch(protect, admin, disableSub);
+router.route("/subscriptions/:id/disable").patch(protect, disableSub);
 
 export default router;

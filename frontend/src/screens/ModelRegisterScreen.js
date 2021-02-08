@@ -6,6 +6,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { register } from '../actions/modelActions';
+import {CountryDropdown, RegionDropdown} from "react-country-region-selector";
 
 const RegisterScreen = ({ history }) => {
   const [message, setMessage] = useState(null);
@@ -165,23 +166,28 @@ const RegisterScreen = ({ history }) => {
         <Form.Row>
           <Form.Group as={Col} md='4' controlId='country'>
             <Form.Label>Country</Form.Label>
-            <Form.Control
+            {/* <CountryDropdown 
+              value={newModel.country}
+              onChange={handleChange}
+            /> */}
+            <Form.Control as={CountryDropdown}
               type='text'
               placeholder='Country'
               name='country'
               value={newModel.country}
-              onChange={handleChange}
+              onChange={(val) => setNewModel({...newModel, country: val})}
             />
             <Form.Text className='text-muted'>Example: Nigeria</Form.Text>
           </Form.Group>
           <Form.Group as={Col} md='4' controlId='state'>
             <Form.Label>State</Form.Label>
-            <Form.Control
+            <Form.Control as={RegionDropdown}
+              country={newModel.country}
               type='text'
               placeholder='State'
               name='state'
               value={newModel.state}
-              onChange={handleChange}
+              onChange={(val) => setNewModel({...newModel, state: val})}
             />
             <Form.Text className='text-muted'>Example: Lagos</Form.Text>
           </Form.Group>

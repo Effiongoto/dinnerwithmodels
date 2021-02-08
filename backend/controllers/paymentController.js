@@ -36,12 +36,24 @@ const updateUserToPaid = asyncHandler(async (req, res) => {
 // @route   PATCH /api/payment/:id/subscribe
 // @access  Private/Admin
 const updateUserToSubscribed = asyncHandler(async (req, res) => {
-  const user = await User.findByIdAndUpdate(req.params.id, {
-    $set: req.body,
-  }, {new: true}).exec();
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      $set: req.body,
+    },
+    { new: true }
+  ).exec();
 
   if (user) {
-    res.json(user);
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      isSubscribed: user.isSubscribed,
+      modelsPaidFor: user.modelsPaidFor,
+      token: generateToken(user._id),
+    });
   } else {
     res.status(404);
     throw new Error("User not found");

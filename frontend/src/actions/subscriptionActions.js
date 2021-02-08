@@ -253,7 +253,6 @@ export const disableSub = (sub, id, user) => async (dispatch, getState) => {
         },
       })
       .then(async (res) => {
-        console.log("payres", res.data);
         if (res.data.message === "Subscription disabled successfully") {
           const { data } = await axios.patch(
             `/api/payment/subscriptions/${id}/disable`,

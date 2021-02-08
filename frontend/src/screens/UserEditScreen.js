@@ -41,7 +41,7 @@ const UserEditScreen = ({ match, history }) => {
   const { models } = modelAll;
 
   const subDetails = useSelector((state) => state.subDetails);
-  const {sub} = subDetails;
+  const { sub } = subDetails;
 
   useEffect(() => {
     if (successUpdate) {
@@ -53,7 +53,7 @@ const UserEditScreen = ({ match, history }) => {
         dispatch(getUserDetails(userId));
         dispatch(listAllModels());
       } else {
-        setUser({...userDetail});
+        setUser({ ...userDetail });
       }
     }
   }, [dispatch, history, userId, userDetail, successUpdate]);
@@ -76,7 +76,7 @@ const UserEditScreen = ({ match, history }) => {
             name !== "isSubscribed"
               ? user.isSubscribed.status
               : name === "isSubscribed" && checked === true
-              ? "null"
+              ? "active"
               : "inactive",
         },
       };
@@ -106,10 +106,12 @@ const UserEditScreen = ({ match, history }) => {
   };
 
   const submitHandler = (e) => {
-    if (user.isSubscribed.status === "null") {
-      dispatch(updateUser(user))
+    if (user.isSubscribed.status === "active") {
+      dispatch(updateUser(user));
     } else if (user.isSubscribed.status === "inactive") {
-      dispatch(disableSub({code: sub.subCode, token: sub.emailToken}, sub._id, user));
+      dispatch(
+        disableSub({ code: sub.subCode, token: sub.emailToken }, sub._id, user)
+      );
     }
     e.preventDefault();
   };
@@ -217,16 +219,22 @@ const UserEditScreen = ({ match, history }) => {
               <Form.Control value={user.modelsPaidFor} readOnly></Form.Control>
             </Form.Group>
 
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                label="Is Subscribed"
-                checked={user.isSubscribed && user.isSubscribed.status === "null" ? true : false}
-                name="isSubscribed"
-                onChange={handleCheck}
-                value={user.isSubscribed}
-              ></Form.Check>
-            </Form.Group>
+            {user.isSubscribed && user.isSubscribed.status === "active" && (
+              <Form.Group>
+                <Form.Check
+                  type="checkbox"
+                  label="Is Subscribed"
+                  checked={
+                    user.isSubscribed && user.isSubscribed.status === "active"
+                      ? true
+                      : false
+                  }
+                  name="isSubscribed"
+                  onChange={handleCheck}
+                  value={user.isSubscribed}
+                ></Form.Check>
+              </Form.Group>
+            )}
 
             <Form.Group>
               <Form.Check

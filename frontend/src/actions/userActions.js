@@ -375,6 +375,8 @@ export const userSubscribe = (id) => async (
       config
     );
 
+    console.log("client", data);
+
     dispatch({
       type: USER_SUBSCRIBE_SUCCESS,
       payload: data,
