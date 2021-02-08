@@ -63,7 +63,7 @@ const ModelProfileScreen = ({ location, history }) => {
             {model.city}, {model.state}, {model.country}{' '}
           </p>
           <p>Gender: {model.gender}</p>
-          <p>States visited often: {model.states_visited_often}</p>
+          <p>States visited often: {model.states_visited_often && model.states_visited_often.join(", ")}</p>
           <p>Minimum cash gift:{model.minCashGift}</p>
           <p>
             Open to dates with {model.open_to_dinner_dates}{' '}

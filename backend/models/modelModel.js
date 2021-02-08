@@ -68,7 +68,7 @@ const modelSchema = mongoose.Schema(
       required: true,
     },
     states_visited_often: {
-      type: String,
+      type: Array,
       required: false,
     },
     open_to_dinner_dates: {
