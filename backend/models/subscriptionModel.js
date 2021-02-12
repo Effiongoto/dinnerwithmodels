@@ -10,6 +10,9 @@ const subscriptionSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    planCode: {
+      type: String
+    },
     emailToken: {
       type: String,
       required: true,

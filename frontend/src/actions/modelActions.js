@@ -24,7 +24,6 @@ import {
   MODEL_UPDATE_FAIL,
   MODEL_CREATE_REVIEW_SUCCESS,
   MODEL_CREATE_REVIEW_FAIL,
-  MODEL_CREATE_REVIEW_RESET,
   MODEL_CREATE_REVIEW_REQUEST,
 } from '../constants/modelConstants';
 
@@ -336,10 +335,11 @@ export const createModelReview = (modelId, review) => async (
       },
     };
 
-    await axios.post(`/api/models/${modelId}/reviews`, review, config);
+    const { data } = await axios.post(`/api/models/${modelId}/reviews`, review, config);
 
     dispatch({
       type: MODEL_CREATE_REVIEW_SUCCESS,
+      payload: data
     });
   } catch (error) {
     dispatch({

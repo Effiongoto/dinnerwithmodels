@@ -15,6 +15,9 @@ import {
   ADMIN_UPDATE_PLAN_FAIL,
   ADMIN_UPDATE_PLAN_REQUEST,
   ADMIN_UPDATE_PLAN_SUCCESS,
+  TRANSACTION_DETAILS_FAIL,
+  TRANSACTION_DETAILS_REQUEST,
+  TRANSACTION_DETAILS_SUCCESS,
 } from "../constants/paymentConstants";
 
 export const createPlan = (plan) => async (dispatch, getState) => {
@@ -207,6 +210,50 @@ export const updatePlan = (plan) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ADMIN_UPDATE_PLAN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const verifyTransaction = (ref) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: TRANSACTION_DETAILS_REQUEST,
+    });
+
+    const {
+      paystackKey: { keys },
+    } = getState();
+
+    await axios
+      .get(`https://api.paystack.co/transaction/verify/${ref}`, {
+        headers: {
+          Authorization: keys.secretKey,
+        },
+      })
+      .then((res) => {
+        if (res.data.message === "Verification successful") {
+          dispatch({
+            type: TRANSACTION_DETAILS_SUCCESS,
+            payload: res.data.data,
+          });
+        } else {
+          const error = new Error("Payment Verification failed");
+          dispatch({
+            type: TRANSACTION_DETAILS_FAIL,
+            payload:
+              error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message,
+          });
+        }
+      });
+  } catch (error) {
+    dispatch({
+      type: TRANSACTION_DETAILS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

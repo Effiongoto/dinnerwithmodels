@@ -32,15 +32,21 @@ const ProfileScreen = ({ location, history }) => {
   const subDetails = useSelector((state) => state.subDetails);
   const { sub } = subDetails;
 
+  const [successMessage, setSuccessMessage] = useState(null);
+
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
     } else {
+      if (success) {
+        setSuccessMessage(success);
+      }
       if (!userDetail || !userDetail.name || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetails(userInfo._id));
       } else {
         setUser({
+          ...user,
           name: userDetail.name,
           email: userDetail.email,
           isSubscribed: userDetail.isSubscribed,
@@ -72,11 +78,13 @@ const ProfileScreen = ({ location, history }) => {
   };
 
   const submitHandler = (e) => {
-    e.preventDefault();
     if (user.password !== user.confirmPassword) {
       setMessage("Passwords do not match");
     } else {
-      if (user.isSubscribed.status === "inactive") {
+      if (
+        userDetail.isSubscribed.status === "active" &&
+        user.isSubscribed.status === "inactive"
+      ) {
         dispatch(
           disableSub(
             { code: sub.subCode, token: sub.emailToken },
@@ -94,6 +102,7 @@ const ProfileScreen = ({ location, history }) => {
         })
       );
     }
+    e.preventDefault();
   };
 
   return (
@@ -102,12 +111,13 @@ const ProfileScreen = ({ location, history }) => {
         <h2>User Profile</h2>
         {message && <Message variant="danger">{message}</Message>}
         {error && <Message variant="danger">{error}</Message>}
-        {success && <Message variant="success">Profile Updated</Message>}
+        {successMessage && <Message variant="success">Profile Updated</Message>}
         {loading && <Loader />}
         <Form onSubmit={submitHandler}>
           <Form.Group>
             <Form.Label>Name</Form.Label>
             <Form.Control
+              type="text"
               name="name"
               placeholder="Enter name"
               value={user.name}
@@ -118,6 +128,7 @@ const ProfileScreen = ({ location, history }) => {
           <Form.Group>
             <Form.Label>Email Address</Form.Label>
             <Form.Control
+              type="email"
               name="email"
               placeholder="Enter email"
               value={user.email}
@@ -128,6 +139,7 @@ const ProfileScreen = ({ location, history }) => {
           <Form.Group>
             <Form.Label>Password Address</Form.Label>
             <Form.Control
+              type="password"
               name="password"
               placeholder="Enter password"
               value={user.password}
@@ -138,6 +150,7 @@ const ProfileScreen = ({ location, history }) => {
           <Form.Group>
             <Form.Label>Confirm Password</Form.Label>
             <Form.Control
+              type="password"
               name="confirmPassword"
               placeholder="Confirm password"
               value={user.confirmPassword}

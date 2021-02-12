@@ -77,8 +77,8 @@ const UserListScreen = ({ history }) => {
                 <td>
                   <ListGroup variant='flush'>
                     {user.modelsPaidFor.map((item, index) => (
-                      <ListGroup.Item key={index} item={item}>
-                        {item}
+                      <ListGroup.Item key={index} item={item.name}>
+                        {item.name}
                       </ListGroup.Item>
                     ))}
                   </ListGroup>

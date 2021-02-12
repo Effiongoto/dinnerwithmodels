@@ -29,6 +29,7 @@ import {
   planDetailsReducer,
   planListReducer,
   planUpdateReducer,
+  verifyTransactionReducer,
 } from "./reducers/paymentReducers";
 import {
   createSubReducer,
@@ -37,6 +38,7 @@ import {
   subEnableReducer,
   subListReducer,
 } from "./reducers/subscriptionReducers";
+import { paystackKeysReducer } from "./reducers/paystackReducers";
 
 const reducer = combineReducers({
   modelList: modelListReducer,
@@ -62,11 +64,13 @@ const reducer = combineReducers({
   planDelete: planDeleteReducer,
   planDetails: planDetailsReducer,
   planUpdate: planUpdateReducer,
+  verifyTransaction: verifyTransactionReducer,
   subCreate: createSubReducer,
   subList: subListReducer,
   subDetails: subDetailsReducer,
   subEnable: subEnableReducer,
   subDisable: subDisableReducer,
+  paystackKey: paystackKeysReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

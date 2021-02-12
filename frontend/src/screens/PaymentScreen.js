@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
-import { PaystackButton } from 'react-paystack';
-import { useDispatch, useSelector } from 'react-redux';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import FormContainer from '../components/FormContainer';
-import { listModelDetails } from '../actions/modelActions';
-import { userPay } from '../actions/userActions';
+import React, { useEffect, useState } from "react";
+import { PaystackButton } from "react-paystack";
+import { useDispatch, useSelector } from "react-redux";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
+import FormContainer from "../components/FormContainer";
+import { listModelDetails } from "../actions/modelActions";
+import { userPay } from "../actions/userActions";
+import { getPaystackKeys } from "../actions/paystackActions";
 
 const PaymentScreen = ({ match, history }) => {
   const dispatch = useDispatch();
@@ -16,56 +17,62 @@ const PaymentScreen = ({ match, history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const paystackKey = useSelector((state) => state.paystackKey);
+  const { keys } = paystackKey;
+
   // const UserPay = useSelector((state) => state.UserPay);
   // const { success: successPay } = UserPay;
 
-  const modelUsername = {
-    username: model.username,
-  };
-
   const userId = userInfo._id;
+  const [pkey, setPkey] = useState(null);
 
   const config = {
     reference: new Date().getTime(),
     email: userInfo.email,
     amount: 500000,
-    publicKey: 'pk_test_7250bd18e57430aaebba6f3b2a370286dabf0656',
+    publicKey: pkey,
   };
 
   const onSuccess = (reference) => {
     // add model.username to users array
-    dispatch(userPay(userId, modelUsername, reference));
-    alert('Payment Successful');
+    dispatch(userPay(userId, model.username, reference));
+    alert("Payment Successful");
     history.push(`/model/${model._id}`);
   };
 
   const onClose = () => {
-    alert('Payment Unsuccessful');
+    alert("Payment Unsuccessful");
   };
 
   const componentProps = {
     ...config,
-    text: 'Pay Now',
+    text: "Pay Now",
     onSuccess: (reference) => onSuccess(reference),
     onClose: onClose,
   };
 
   useEffect(() => {
     dispatch(listModelDetails(match.params.id));
-  }, [match, dispatch]);
+    if (!keys) {
+      dispatch(getPaystackKeys());
+    }
+    if (keys) {
+      setPkey(keys.publicKey);
+    }
+  }, [match, dispatch, keys]);
 
   return (
     <FormContainer>
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>{error}</Message>
+        <Message variant="danger">{error}</Message>
       ) : (
         <>
           <h3>Payment for {model.username}'s private information</h3>
           <PaystackButton
             {...componentProps}
-            className='btn btn-success my-2 d-flex justify-content-center'
+            className="btn btn-success my-2 d-flex justify-content-center"
           />
           {/* <Message className='my-2'>
             Please make sure you fill in the same Email Address used to sign up

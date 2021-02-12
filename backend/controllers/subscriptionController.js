@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Subscription from "../models/subscriptionModel.js";
 import _ from "lodash";
+import axios from "axios";
 
 // @desc View subscriptions
 // @route GET /api/payment/subscriptions
@@ -15,7 +16,7 @@ const getSubs = asyncHandler(async (req, res) => {
 // @access Admin
 const getSubById = asyncHandler(async (req, res) => {
   const sub = await Subscription.findOne({ subCode: req.params.id }).exec();
-  
+
   if (sub) {
     res.json(sub);
   } else {
@@ -27,33 +28,81 @@ const getSubById = asyncHandler(async (req, res) => {
 // @route POST /api/payment/subscriptions
 // @access Admin
 const createSub = asyncHandler(async (req, res) => {
-  const {
-    user,
-    subscription_code: subCode,
-    email_token: emailToken,
-    amount,
-    status,
-    createdAt,
-  } = req.body;
+  axios
+    .get(`https://api.paystack.co/transaction/verify/${req.body.reference}`, {
+      headers: {
+        Authorization: process.env.PAYSTACK_SECRET_KEY,
+      },
+    })
+    .then((response) => {
+      if (response.data.message === "Verification successful") {
+        axios
+          .post("https://api.paystack.co/subscription", req.body.sub, {
+            headers: {
+              Authorization: process.env.PAYSTACK_SECRET_KEY,
+              "Content-Type": "application/json",
+            },
+          })
+          .then(async (response) => {
+            const subDetails = response.data.data;
+            const {
+              subscription_code: subCode,
+              email_token: emailToken,
+              amount,
+              status,
+              createdAt,
+            } = subDetails;
 
-  const subExists = await Subscription.findOne({ subCode }).exec();
+            const subExists = await Subscription.findOne({ subCode }).exec();
 
-  if (subExists) {
-    res.status(404);
-    throw new Error("Subscription already exists");
-  }
+            if (subExists) {
+              res.status(404);
+              throw new Error("Subscription already exists");
+            }
 
-  const sub = await Subscription.create({
-    user: { ..._.pick(user, ["_id", "name", "email"]) },
-    subCode,
-    emailToken,
-    amount,
-    status,
-    createdAt,
-  },);
-  if (sub) {
-    res.json(sub);
-  }
+            const sub = await Subscription.create({
+              user: { ..._.pick(req.body.user, ["_id", "name", "email"]) },
+              subCode,
+              planCode: req.body.subDetails.planCode,
+              emailToken,
+              amount,
+              status,
+              createdAt,
+            });
+            if (sub) {
+              console.log(sub);
+              res.json(sub);
+            }
+          });
+      }
+    });
+  // const {
+  //   user,
+  //   subscription_code: subCode,
+  //   email_token: emailToken,
+  //   amount,
+  //   status,
+  //   createdAt,
+  // } = req.body;
+
+  // const subExists = await Subscription.findOne({ subCode }).exec();
+
+  // if (subExists) {
+  //   res.status(404);
+  //   throw new Error("Subscription already exists");
+  // }
+
+  // const sub = await Subscription.create({
+  //   user: { ..._.pick(user, ["_id", "name", "email"]) },
+  //   subCode,
+  //   emailToken,
+  //   amount,
+  //   status,
+  //   createdAt,
+  // },);
+  // if (sub) {
+  //   res.json(sub);
+  // }
 });
 
 // @desc Enable Subscription
@@ -78,18 +127,38 @@ const enableSub = asyncHandler(async (req, res) => {
 // @route PATCH /api/payment/subscriptions/:id/disable
 // @access Admin
 const disableSub = asyncHandler(async (req, res) => {
-  const sub = await Subscription.findByIdAndUpdate(
-    req.params.id,
-    { $set: req.body },
-    { new: true }
-  ).exec();
+  axios
+    .post("https://api.paystack.co/subscription/disable", req.body.sub, {
+      headers: {
+        Authorization: process.env.PAYSTACK_SECRET_KEY,
+        "Content-Type": "application/json",
+      },
+    })
+    .then(async (response) => {
+      if (response.data.message === "Subscription disabled successfully") {
+        const sub = await Subscription.findById(req.params.id).exec();
+        if (sub) {
+          sub.status = "inactive";
+        }
+        const updatedSub = await sub.save();
+        res.json(updatedSub);
+      } else {
+        res.status(404);
+        throw new Error("Disable Subscription Failed");
+      }
+    });
+  // const sub = await Subscription.findByIdAndUpdate(
+  //   req.params.id,
+  //   { $set: req.body },
+  //   { new: true }
+  // ).exec();
 
-  if (sub) {
-    res.json(sub);
-  } else {
-    res.status(404);
-    throw new Error("Subscription does not exist");
-  }
+  // if (sub) {
+  //   res.json(sub);
+  // } else {
+  //   res.status(404);
+  //   throw new Error("Subscription does not exist");
+  // }
 });
 
 export { getSubs, getSubById, createSub, enableSub, disableSub };

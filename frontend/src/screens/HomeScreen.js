@@ -10,7 +10,6 @@ import { listModels } from "../actions/modelActions";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 
 const HomeScreen = ({ match, history }) => {
-  // const [heading, setHeading] = useState("All Models");
   const [filter, setFilter] = useState({
     country: "",
     state: "",
@@ -127,14 +126,18 @@ const HomeScreen = ({ match, history }) => {
             <Col md={9}>
               <h1 style={{ fontFamily: "Imbue" }}>{heading}</h1>
               {!filterStatus ? (
-                <Row>
-                  {models.map((model) => (
-                    <Col key={model._id} sm={12} md={6} lg={4} xl={3}>
-                      <Model model={model} />
-                    </Col>
-                  ))}
-                </Row>
-              ) : (
+                models && models.length !== 0 ? (
+                  <Row>
+                    {models.map((model) => (
+                      <Col key={model._id} sm={12} md={6} lg={4} xl={3}>
+                        <Model model={model} />
+                      </Col>
+                    ))}
+                  </Row>
+                ) : (
+                  <h1 style={{ fontFamily: "Imbue" }}>No models found :(</h1>
+                )
+              ) : modelsList && modelsList.length !== 0 ? (
                 <Row>
                   {modelsList.map((model) => (
                     <Col key={model._id} sm={12} md={6} lg={4} xl={3}>
@@ -142,6 +145,8 @@ const HomeScreen = ({ match, history }) => {
                     </Col>
                   ))}
                 </Row>
+              ) : (
+                <h1 style={{ fontFamily: "Imbue" }}>No models found :(</h1>
               )}
               <Paginate
                 pages={pages}
