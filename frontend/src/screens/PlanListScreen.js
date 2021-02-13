@@ -42,7 +42,7 @@ const PlanListScreen = ({ history }) => {
             <tr>
               <th>ID</th>
               <th>NAME</th>
-              <th>AMOUNT</th>
+              <th>AMOUNT(Kobos)</th>
               <th>INTERVAL</th>
               <th>PLAN CODE</th>
               <th>CURRENCY</th>

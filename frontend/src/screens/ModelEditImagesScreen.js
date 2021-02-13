@@ -82,9 +82,13 @@ const ModelEditImagesScreen = ({ history }) => {
   }, [dispatch, history, modelInfo, model, successUpdate]);
 
   const uploadFileHandler = async (e) => {
+    const name = e.target.name;
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append('image', file);
+    formData.append("name", name);
+    formData.append("model", model);
+    formData.append("id", model._id);
 
     try {
       const config = {

@@ -33,7 +33,7 @@ import {
   USER_SUBSCRIBE_SUCCESS,
   USER_SUBSCRIBE_FAIL,
   USER_SUBSCRIBE_RESET,
-} from '../constants/userConstants';
+} from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
   switch (action.type) {
@@ -141,9 +141,7 @@ export const userUpdateReducer = (state = { user: {} }, action) => {
 export const userPayReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_PAY_REQUEST:
-      return {
-        loading: true,
-      };
+      return { loading: true };
     case USER_PAY_SUCCESS:
       return {
         loading: false,
@@ -164,9 +162,7 @@ export const userPayReducer = (state = {}, action) => {
 export const userSubscribeReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_SUBSCRIBE_REQUEST:
-      return {
-        loading: true,
-      };
+      return { loading: true };
     case USER_SUBSCRIBE_SUCCESS:
       return {
         loading: false,

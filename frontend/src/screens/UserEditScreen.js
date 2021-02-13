@@ -17,6 +17,7 @@ const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id;
 
   const [user, setUser] = useState({
+    _id: "",
     name: "",
     email: "",
     password: "",
@@ -41,7 +42,7 @@ const UserEditScreen = ({ match, history }) => {
   const { models } = modelAll;
 
   const subDetails = useSelector((state) => state.subDetails);
-  const {sub} = subDetails;
+  const { sub } = subDetails;
 
   useEffect(() => {
     if (successUpdate) {
@@ -53,7 +54,15 @@ const UserEditScreen = ({ match, history }) => {
         dispatch(getUserDetails(userId));
         dispatch(listAllModels());
       } else {
-        setUser({...userDetail});
+        setUser({
+          ...user,
+          _id: userDetail._id,
+          name: userDetail.name,
+          email: userDetail.email,
+          modelsPaidFor: userDetail.modelsPaidFor,
+          isSubscribed: userDetail.isSubscribed,
+          isAdmin: userDetail.isAdmin,
+        });
       }
     }
   }, [dispatch, history, userId, userDetail, successUpdate]);
@@ -76,7 +85,7 @@ const UserEditScreen = ({ match, history }) => {
             name !== "isSubscribed"
               ? user.isSubscribed.status
               : name === "isSubscribed" && checked === true
-              ? "null"
+              ? "active"
               : "inactive",
         },
       };
@@ -88,7 +97,7 @@ const UserEditScreen = ({ match, history }) => {
     setUser((prevValue) => {
       return {
         ...prevValue,
-        [name]: [...new Set([...prevValue.modelsPaidFor, value])],
+        [name]: [...new Set([...prevValue.modelsPaidFor, {name: value}])],
       };
     });
   };
@@ -98,18 +107,23 @@ const UserEditScreen = ({ match, history }) => {
     setUser((prevValue) => {
       return {
         ...prevValue,
-        [name]: [...new Set([...prevValue.modelsPaidFor, value])].filter(
-          (el) => el !== value
+        [name]: [...prevValue.modelsPaidFor].filter(
+          (el) => el.name !== value
         ),
       };
     });
   };
 
   const submitHandler = (e) => {
-    if (user.isSubscribed.status === "null") {
-      dispatch(updateUser(user))
-    } else if (user.isSubscribed.status === "inactive") {
-      dispatch(disableSub({code: sub.subCode, token: sub.emailToken}, sub._id, user));
+    if (userDetail.isSubscribed.status === "inactive") {
+      dispatch(updateUser(user));
+    } else if (
+      userDetail.isSubscribed.status === "active" &&
+      user.isSubscribed.status === "inactive"
+    ) {
+      dispatch(
+        disableSub({ code: sub.subCode, token: sub.emailToken }, sub._id, user)
+      );
     }
     e.preventDefault();
   };
@@ -168,14 +182,13 @@ const UserEditScreen = ({ match, history }) => {
                 <Form.Control
                   as="select"
                   name="modelsPaidFor"
-                  value={user.modelsPaidFor}
                   onChange={addToModelArray}
                 >
                   <option value="">Select Models ...</option>
                   {models &&
                     models
                       .filter(
-                        (model) => !user.modelsPaidFor.includes(model.username)
+                        (model) => !user.modelsPaidFor.find((m) => m.name === model.username)
                       )
                       .map((model) => {
                         return (
@@ -192,15 +205,12 @@ const UserEditScreen = ({ match, history }) => {
                 <Form.Control
                   as="select"
                   name="modelsPaidFor"
-                  value={user.modelsPaidFor}
                   onChange={removeFromModelArray}
                 >
                   <option value="">Select Models Paid For ...</option>
                   {models &&
                     models
-                      .filter((model) =>
-                        user.modelsPaidFor.includes(model.username)
-                      )
+                      .filter((model) => user.modelsPaidFor.find((m) => m.name ===model.username))
                       .map((model) => {
                         return (
                           <option key={model._id} value={model.name}>
@@ -214,19 +224,25 @@ const UserEditScreen = ({ match, history }) => {
 
             <Form.Group>
               <Form.Label>Models Paid For</Form.Label>
-              <Form.Control value={user.modelsPaidFor} readOnly></Form.Control>
+              <Form.Control value={user.modelsPaidFor.map((m) => m.name)} readOnly></Form.Control>
             </Form.Group>
 
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                label="Is Subscribed"
-                checked={user.isSubscribed && user.isSubscribed.status === "null" ? true : false}
-                name="isSubscribed"
-                onChange={handleCheck}
-                value={user.isSubscribed}
-              ></Form.Check>
-            </Form.Group>
+            {userDetail.isSubscribed && userDetail.isSubscribed.status === "active" && (
+              <Form.Group>
+                <Form.Check
+                  type="checkbox"
+                  label="Is Subscribed"
+                  checked={
+                    user.isSubscribed && user.isSubscribed.status === "active"
+                      ? true
+                      : false
+                  }
+                  name="isSubscribed"
+                  onChange={handleCheck}
+                  value={user.isSubscribed}
+                ></Form.Check>
+              </Form.Group>
+            )}
 
             <Form.Group>
               <Form.Check

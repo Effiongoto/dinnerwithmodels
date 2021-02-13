@@ -15,6 +15,9 @@ import {
   ADMIN_UPDATE_PLAN_FAIL,
   ADMIN_UPDATE_PLAN_REQUEST,
   ADMIN_UPDATE_PLAN_SUCCESS,
+  TRANSACTION_DETAILS_FAIL,
+  TRANSACTION_DETAILS_REQUEST,
+  TRANSACTION_DETAILS_SUCCESS,
 } from "../constants/paymentConstants";
 
 export const createPlan = (plan) => async (dispatch, getState) => {
@@ -34,29 +37,16 @@ export const createPlan = (plan) => async (dispatch, getState) => {
       },
     };
 
-    axios
-      .post(`https://api.paystack.co/plan`, plan, {
-        headers: {
-          Authorization: `Bearer sk_test_02c6bf4338249786fecffb3cb1ba9ce59e1efe67`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then(async (res) => {
-        const { data } = await axios.post(
-          "/api/payment/plans",
-          res.data.data,
-          config
-        );
+    const { data } = await axios.post("/api/payment/plans", { plan }, config);
 
-        dispatch({
-          type: ADMIN_CREATE_PLAN_SUCCESS,
-          payload: data,
-        });
+    dispatch({
+      type: ADMIN_CREATE_PLAN_SUCCESS,
+      payload: data,
+    });
 
-        dispatch(listPlans());
+    dispatch(listPlans());
 
-        localStorage.setItem("plan", JSON.stringify(data));
-      });
+    localStorage.setItem("plan", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: ADMIN_CREATE_PLAN_FAIL,
@@ -185,28 +175,45 @@ export const updatePlan = (plan) => async (dispatch, getState) => {
       },
     };
 
-    axios
-      .put(
-        `https://api.paystack.co/plan/${plan.planCode}`,
-        { name: plan.name, amount: plan.amount },
-        {
-          headers: {
-            Authorization: `Bearer sk_test_02c6bf4338249786fecffb3cb1ba9ce59e1efe67`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then(async (res) => {
-        console.log(res);
-        if (res.data.status === true) {
-          await axios.patch(`/api/payment/plans/${plan._id}`, plan, config);
+    await axios.patch(`/api/payment/plans/${plan._id}`, { plan }, config);
 
-          dispatch({ type: ADMIN_UPDATE_PLAN_SUCCESS });
-        }
-      });
+    dispatch({ type: ADMIN_UPDATE_PLAN_SUCCESS });
   } catch (error) {
     dispatch({
       type: ADMIN_UPDATE_PLAN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const verifyTransaction = (ref) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: TRANSACTION_DETAILS_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/payment/verify/${ref}`, config);
+
+    dispatch({
+      type: TRANSACTION_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: TRANSACTION_DETAILS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

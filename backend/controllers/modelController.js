@@ -65,9 +65,9 @@ const getModelById = asyncHandler(async (req, res) => {
 // @route   POST /api/models/login
 // @access  Public
 const authModel = asyncHandler(async (req, res) => {
-  const { input, password } = req.body; //number or pasword
+  const { username: email, password } = req.body; //number or pasword
 
-  const model = await Model.findOne({ input });
+  const model = await Model.findOne({ email });
 
   if (model && (await model.matchPassword(password))) {
     res.json({

@@ -305,37 +305,26 @@ export const userPay = (userId, modelUsername, reference) => async (
       },
     };
 
-    axios
-      .get(
-        `https://api.paystack.co/transaction/verify/${reference.reference}`,
-        {
-          headers: {
-            Authorization: `Bearer sk_test_02c6bf4338249786fecffb3cb1ba9ce59e1efe67`,
-          },
-        }
-      )
-      .then(async (res) => {
-        if (res.data.message === "Verification successful") {
-          const { data } = await axios.put(
-            `/api/payment/${userId}/pay`,
-            modelUsername,
-            config
-          );
-          console.log("data", data);
+    const { data } = await axios.put(
+      `/api/payment/${userId}/pay`,
+      {
+        model: { name: modelUsername, reference: reference.reference },
+        reference: reference.reference,
+      },
+      config
+    );
 
-          dispatch({
-            type: USER_PAY_SUCCESS,
-            payload: data,
-          });
+    dispatch({
+      type: USER_PAY_SUCCESS,
+      payload: data,
+    });
 
-          dispatch({
-            type: USER_LOGIN_SUCCESS,
-            payload: data,
-          });
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data,
+    });
 
-          localStorage.setItem("userInfo", JSON.stringify(data));
-        }
-      });
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: USER_PAY_FAIL,
@@ -347,10 +336,7 @@ export const userPay = (userId, modelUsername, reference) => async (
   }
 };
 
-export const userSubscribe = (id) => async (
-  dispatch,
-  getState
-) => {
+export const userSubscribe = (id) => async (dispatch, getState) => {
   try {
     dispatch({
       type: USER_SUBSCRIBE_REQUEST,
@@ -360,7 +346,9 @@ export const userSubscribe = (id) => async (
       userLogin: { userInfo },
     } = getState();
 
-    const {subCreate: {sub}} = getState();
+    const {
+      subCreate: { sub },
+    } = getState();
 
     const config = {
       headers: {
@@ -371,7 +359,15 @@ export const userSubscribe = (id) => async (
 
     const { data } = await axios.patch(
       `/api/payment/${id}/subscribe`,
-      { isSubscribed: { status: sub.status, subCode: sub.subCode, emailToken: sub.emailToken } },
+      {
+        isSubscribed: {
+          status: sub.status,
+          subCode: sub.subCode,
+          planCode: sub.planCode,
+          emailToken: sub.emailToken,
+          reference: sub.reference,
+        },
+      },
       config
     );
 

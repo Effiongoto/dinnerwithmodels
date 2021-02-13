@@ -8,6 +8,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { PaystackButton } from "react-paystack";
 import { createSub } from "../actions/subscriptionActions";
+import { getPaystackKeys } from "../actions/paystackActions";
 
 const SubscriptionScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -18,17 +19,27 @@ const SubscriptionScreen = ({ history }) => {
   const planList = useSelector((state) => state.planList);
   const { plans } = planList;
 
+  const paystackKey = useSelector((state) => state.paystackKey);
+  const { keys } = paystackKey;
+
   const [selectedPlan, setPlan] = useState({});
+  const [pkey, setPkey] = useState(null);
 
   const config = {
     reference: new Date().getTime(),
     email: userInfo.email,
     amount: selectedPlan && selectedPlan.amount,
-    publicKey: "pk_test_7250bd18e57430aaebba6f3b2a370286dabf0656",
+    publicKey: pkey,
   };
 
   const onSuccess = (reference) => {
-    dispatch(createSub({customer: config.email, plan: selectedPlan.planCode}, userInfo, reference));
+    dispatch(
+      createSub(
+        { customer: config.email, plan: selectedPlan.planCode },
+        userInfo,
+        reference
+      )
+    );
     history.push(`/`);
   };
 
@@ -47,7 +58,13 @@ const SubscriptionScreen = ({ history }) => {
     if (!plans || plans.length === 0) {
       dispatch(listPlans());
     }
-  }, [dispatch, plans]);
+    if (!keys) {
+      dispatch(getPaystackKeys());
+    }
+    if (keys) {
+      setPkey(keys.publicKey);
+    }
+  }, [dispatch, plans, keys]);
 
   const handleChange = (event) => {
     const { value } = event.target;
@@ -73,7 +90,6 @@ const SubscriptionScreen = ({ history }) => {
                 <Form.Control
                   as="select"
                   name="plan"
-                  value={selectedPlan}
                   onChange={handleChange}
                 >
                   <option value="">Select Plan ...</option>
@@ -90,7 +106,7 @@ const SubscriptionScreen = ({ history }) => {
 
               <Form.Group>
                 <Form.Label>Plan Amount</Form.Label>
-                <Form.Control value={config.amount/100}></Form.Control>
+                <Form.Control value={selectedPlan.amount / 100} readOnly></Form.Control>
               </Form.Group>
             </Form>
             <PaystackButton

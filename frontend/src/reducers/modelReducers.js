@@ -182,7 +182,7 @@ export const modelReviewCreateReducer = (state = {}, action) => {
     case MODEL_CREATE_REVIEW_REQUEST:
       return { loading: true };
     case MODEL_CREATE_REVIEW_SUCCESS:
-      return { loading: false, success: true };
+      return { loading: false, success: true, message: action.payload.message };
     case MODEL_CREATE_REVIEW_FAIL:
       return { loading: false, error: action.payload };
     case MODEL_CREATE_REVIEW_RESET:
