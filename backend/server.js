@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
+import colors from "colors";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
 import modelRoutes from "./routes/modelRoutes.js";
@@ -24,7 +25,6 @@ app.use("/hooks", webHookRoutes);
 
 app.get("/api/config/paystack", (req, res) =>
   res.json({
-    secretKey: process.env.PAYSTACK_SECRET_KEY,
     publicKey: process.env.PAYSTACK_PUBLIC_KEY,
   })
 );

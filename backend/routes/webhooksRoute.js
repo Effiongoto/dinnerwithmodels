@@ -1,8 +1,9 @@
 import express from "express";
 import crypto from "crypto";
-import User from "../models/userModel";
+import User from "../models/userModel.js";
 const router = express.Router();
 
+// use the webhooks to check subscriptions.
 router.post("/", async (req, res) => {
   const hash = crypto
     .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY)
@@ -16,9 +17,16 @@ router.post("/", async (req, res) => {
     if (user) {
       if (user.isSubscribed.planCode === planCode) {
         if (event.event === "charge.success") {
-          user.isSubscribed = user.isSubscribed;
+          user.isSubscribed = {
+            ...user.isSubscribed,
+            reference: event.data.reference,
+          };
         } else {
-          user.isSubscribed = { ...user.isSubscribed, status: "inactive" };
+          user.isSubscribed = {
+            ...user.isSubscribed,
+            status: "inactive",
+            reference: event.data.reference,
+          };
         }
         await user.save();
       }

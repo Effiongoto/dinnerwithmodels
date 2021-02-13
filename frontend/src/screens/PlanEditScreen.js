@@ -79,7 +79,8 @@ const PlanEditScreen = ({ match, history }) => {
           />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Amount</Form.Label>
+          <Form.Label>Amount(Amount should be in kobo if currency is NGN and pesewas for
+            GHS)</Form.Label>
           <Form.Control
             onChange={handleChange}
             name="amount"

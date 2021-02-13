@@ -3,6 +3,7 @@ const router = express.Router();
 import {
   updateUserToPaid,
   updateUserToSubscribed,
+  verifyTransaction,
 } from "../controllers/paymentController.js";
 import {
   createPlan,
@@ -32,5 +33,6 @@ router.route("/subscriptions").get(protect, getSubs).post(protect, createSub);
 router.route("/subscriptions/:id").get(protect, getSubById);
 router.route("/subscriptions/:id/enable").patch(protect, admin, enableSub);
 router.route("/subscriptions/:id/disable").patch(protect, disableSub);
+router.route("/verify/:ref").get(protect, verifyTransaction);
 
 export default router;

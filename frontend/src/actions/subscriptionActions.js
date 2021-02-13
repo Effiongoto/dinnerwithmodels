@@ -37,7 +37,7 @@ export const createSub = (sub, user, reference) => async (
 
     const { data } = await axios.post(
       `/api/payment/subscriptions`,
-      { reference, user, sub },
+      { reference: reference.reference, user, sub },
       config
     );
 
@@ -150,7 +150,7 @@ export const disableSub = (sub, id, user) => async (dispatch, getState) => {
 
     const { data } = await axios.patch(
       `/api/payment/subscriptions/${id}/disable`,
-      sub,
+      {sub},
       config
     );
 

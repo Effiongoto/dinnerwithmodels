@@ -38,6 +38,13 @@ const VerifyTransactionScreen = ({ history }) => {
           <p><strong>Date:</strong> {details.transaction_date}</p>
           <p><strong>Reference Number:</strong> {details.reference}</p>
           <p><strong>Customer Email:</strong> {details.customer.email}</p>
+          {details.plan && details.plan.plan_code && (
+            <>
+              <p><strong>Plan Code:</strong> {details.plan.plan_code}</p>
+              <p><strong>Plan Name:</strong> {details.plan.name}</p>
+              <p><strong>Plan Interval:</strong> {details.plan.interval}</p>
+            </>
+          )}
         </>
       ) : (
         <>

@@ -227,7 +227,7 @@ const UserEditScreen = ({ match, history }) => {
               <Form.Control value={user.modelsPaidFor.map((m) => m.name)} readOnly></Form.Control>
             </Form.Group>
 
-            {user.isSubscribed && user.isSubscribed.status === "active" && (
+            {userDetail.isSubscribed && userDetail.isSubscribed.status === "active" && (
               <Form.Group>
                 <Form.Check
                   type="checkbox"

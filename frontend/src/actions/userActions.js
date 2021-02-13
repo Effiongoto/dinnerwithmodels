@@ -307,7 +307,10 @@ export const userPay = (userId, modelUsername, reference) => async (
 
     const { data } = await axios.put(
       `/api/payment/${userId}/pay`,
-      { model: { name: modelUsername, tx_ref: reference.reference } },
+      {
+        model: { name: modelUsername, tx_ref: reference.reference },
+        reference: reference.reference,
+      },
       config
     );
 
@@ -362,6 +365,7 @@ export const userSubscribe = (id) => async (dispatch, getState) => {
           subCode: sub.subCode,
           planCode: sub.planCode,
           emailToken: sub.emailToken,
+          reference: sub.reference,
         },
       },
       config
