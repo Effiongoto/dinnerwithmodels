@@ -24,7 +24,10 @@ import ModelEditImagesScreen from "./screens/ModelEditImagesScreen";
 import AddPlanScreen from "./screens/AddPlanScreen";
 import PlanListScreen from "./screens/PlanListScreen";
 import PlanEditScreen from "./screens/PlanEditScreen";
-import verifyTransactionScreen from "./screens/VerifyTransactionScreen";
+import VerifyTransactionScreen from "./screens/VerifyTransactionScreen";
+import CarouselListScreen from "./screens/CarouselListScreen";
+import AddCarouselScrren from "./screens/AddCarouselScreen";
+import CarouselEditScreen from "./screens/CarouselEditScreen";
 
 const App = () => {
   return (
@@ -63,7 +66,10 @@ const App = () => {
             component={PlanEditScreen}
             exact
           />
-          <Route path="/admin/verifyTransaction" component={verifyTransactionScreen} exact />
+          <Route path="/admin/carousel" component={CarouselListScreen} exact />
+          <Route path="/admin/carousel/add" component={AddCarouselScrren} exact />
+          <Route path="/admin/carousel/:id/edit" component={CarouselEditScreen} exact/>
+          <Route path="/admin/verifyTransaction" component={VerifyTransactionScreen} exact />
           <Route path="/admin/userlist" component={UserListScreen} exact />
           <Route path="/admin/user/:id/edit" component={UserEditScreen} />
           <Route path="/admin/modellist" component={ModelListScreen} exact />

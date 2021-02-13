@@ -38,40 +38,21 @@ const upload = multer({
 });
 
 router.post("/", upload.single("image"), async (req, res) => {
-  if (req.body.name.includes("private")) {
+  // if (req.body.name.includes("private")) {
     // const model = await Model.findById(req.body.id).exec();
-    // if (model.watermarkImage) {
-    //   watermark.addWatermark(
-    //     req.file.path,
-    //     `${path.resolve()}${model.watermarkImage}`,
-    //     {
-    //       ratio: 0.2,
-    //       opacity: 0.2,
-    //       dstPath: req.file.path,
-    //     }
-    //   );
-    // } else if (model.watermarkText) {
-    //   console.log("text", model.watermarkText);
-    //   watermark.addTextWatermark(req.file.path, {
-    //     text: model.watermarkText,
-    //     textSize: 6,
-    //     dstPath: req.file.path,
-    //   });
-    // } else {
-    //   console.log("sike!");
-    // }
-    jimp
-      .read(req.file.path)
-      .then((tpl) =>
-        jimp.read("uploads/watermark.png").then((logoTpl) => {
-          logoTpl.opacity(0.5);
-          return tpl.composite(logoTpl, 512, 512, [
-            jimp.BLEND_DESTINATION_OVER,
-          ]);
-        })
-      )
-      .then((tpl) => tpl.write(req.file.path));
-  }
+  //   jimp
+  //     .read(req.file.path)
+  //     .then((tpl) =>
+  //       jimp.read("uploads/watermark.png").then((logoTpl) => {
+  //         logoTpl.opacity(0.5);
+  //         return tpl.composite(logoTpl, 512, 512, [
+  //           jimp.BLEND_DESTINATION_OVER,
+  //         ]);
+  //       })
+  //     )
+  //     .then((tpl) => tpl.write(req.file.path));
+  // }
+  console.log(req.file.path);
   res.send(`/${req.file.path}`);
 });
 

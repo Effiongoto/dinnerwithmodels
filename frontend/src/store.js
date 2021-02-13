@@ -39,6 +39,13 @@ import {
   subListReducer,
 } from "./reducers/subscriptionReducers";
 import { paystackKeysReducer } from "./reducers/paystackReducers";
+import {
+  carouselDeleteReducer,
+  carouselDetailsReducer,
+  carouselListReducer,
+  carouselUpdateReducer,
+  createCarouselReducer,
+} from "./reducers/carouselReducers";
 
 const reducer = combineReducers({
   modelList: modelListReducer,
@@ -71,6 +78,11 @@ const reducer = combineReducers({
   subEnable: subEnableReducer,
   subDisable: subDisableReducer,
   paystackKey: paystackKeysReducer,
+  carouselCreate: createCarouselReducer,
+  carouselList: carouselListReducer,
+  carouselDelete: carouselDeleteReducer,
+  carouselDetails: carouselDetailsReducer,
+  carouselUpdate: carouselUpdateReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

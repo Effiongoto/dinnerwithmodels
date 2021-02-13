@@ -308,7 +308,7 @@ export const userPay = (userId, modelUsername, reference) => async (
     const { data } = await axios.put(
       `/api/payment/${userId}/pay`,
       {
-        model: { name: modelUsername, tx_ref: reference.reference },
+        model: { name: modelUsername, reference: reference.reference },
         reference: reference.reference,
       },
       config

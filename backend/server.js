@@ -9,6 +9,7 @@ import userRoutes from "./routes/userRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import webHookRoutes from "./routes/webhooksRoute.js";
+import carouselRoutes from "./routes/carouselRoutes.js";
 dotenv.config();
 
 connectDB();
@@ -21,6 +22,7 @@ app.use("/api/models", modelRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/carousel", carouselRoutes);
 app.use("/hooks", webHookRoutes);
 
 app.get("/api/config/paystack", (req, res) =>

@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { TwitterTimelineEmbed } from "react-twitter-embed";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, ButtonGroup, Button } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  ButtonGroup,
+  Button,
+  Carousel,
+  Image,
+} from "react-bootstrap";
 import Model from "../components/Model";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import Paginate from "../components/Paginate";
 import { listModels } from "../actions/modelActions";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import { Link } from "react-router-dom";
+import { listCarousels } from "../actions/carouselActions";
 
 const HomeScreen = ({ match, history }) => {
   const [filter, setFilter] = useState({
@@ -15,6 +24,7 @@ const HomeScreen = ({ match, history }) => {
     state: "",
     city: "",
   });
+
   const keyword = match.params.keyword;
   const gender = match.params.gender;
   const verified = "true";
@@ -31,13 +41,79 @@ const HomeScreen = ({ match, history }) => {
 
   const modelList = useSelector((state) => state.modelList);
   const { loading, error, models, page, pages } = modelList;
+
   const [filterStatus, setFilterStatus] = useState(false);
   const [modelsList, setModelsList] = useState([]);
 
-  useEffect(() => {
-    dispatch(listModels(keyword, gender, verified, pageNumber));
-    setFilterStatus(false);
-  }, [dispatch, keyword, gender, pageNumber]);
+  const carousel = {
+    signup: {
+      image: "/images/1.jpeg",
+      text: <Link to="/register/model">Sign up as a model ;)</Link>,
+    },
+    maleModelOfTheDay: "",
+    femaleModelOfTheDay: "",
+    other: undefined,
+  };
+
+  if (models.length !== 0) {
+    const highestRatedMaleModels = [
+      ...models.filter(
+        (model) =>
+          model.gender === "male" &&
+          model.rating ===
+            Math.max(
+              ...models
+                .filter((model) => model.gender === "male")
+                .map((model) => model.rating)
+            )
+      ),
+    ];
+
+    const highestRatedFemaleModels = [
+      ...models.filter(
+        (model) =>
+          model.gender === "female" &&
+          model.rating ===
+            Math.max(
+              ...models
+                .filter((model) => model.gender === "female")
+                .map((model) => model.rating)
+            )
+      ),
+    ];
+
+    const maleModelOfTheDay =
+      highestRatedMaleModels[
+        Math.floor(Math.random() * highestRatedMaleModels.length)
+      ];
+    const femaleModelOfTheDay =
+      highestRatedFemaleModels[
+        Math.floor(Math.random() * highestRatedFemaleModels.length)
+      ];
+    carousel.maleModelOfTheDay = {
+      image: maleModelOfTheDay.profileImage,
+      text: "Male model of the day",
+    };
+    carousel.femaleModelOfTheDay = {
+      image: femaleModelOfTheDay.profileImage,
+      text: " Female model of the day",
+    };
+  }
+
+  const carouselList = useSelector((state) => state.carouselList);
+  const { carousels } = carouselList;
+  console.log("caro", carousels);
+  const adminCarousels = {};
+  if (carousels && carousels.length !== 0) {
+    console.log("not zero");
+    for (let i = 0; i < carousels.length; i++) {
+      adminCarousels[carousels[i].name] = {
+        image: carousels[i].image,
+        text: carousels[i].text,
+      };
+    }
+    Object.assign(carousel, adminCarousels);
+  }
 
   const countryFilter = (value) => {
     setFilter({ ...filter, country: value });
@@ -72,8 +148,33 @@ const HomeScreen = ({ match, history }) => {
       history.push(`/`);
     }
   };
+
+  useEffect(() => {
+    dispatch(listModels(keyword, gender, verified, pageNumber));
+    dispatch(listCarousels());
+    setFilterStatus(false);
+  }, [dispatch, keyword, gender, pageNumber]);
+
   return (
     <>
+      <Carousel interval={3000}>
+        {Object.keys(carousel)
+          .filter((item) => carousel[item] !== undefined)
+          .map((item, index) => (
+            <Carousel.Item key={index}>
+              {carousel[item].image && (
+                <Image
+                  src={carousel[item].image}
+                  className="d-block w-100"
+                  alt="carousel image"
+                />
+              )}
+              <Carousel.Caption>
+                <h4>{carousel[item].text}</h4>
+              </Carousel.Caption>
+            </Carousel.Item>
+          ))}
+      </Carousel>
       <ButtonGroup size="sm" className="justify-content-md-center">
         <Button onClick={buttonHandler} value="All Models">
           All Models

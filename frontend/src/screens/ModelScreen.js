@@ -150,7 +150,6 @@ const ModelScreen = ({ match, history }) => {
                     <Carousel.Item key={index}>
                       <Image
                         onClick={() => overlayHandler(image)}
-                        style={{ margin: "auto", maxWidth: "20%" }}
                         src={image}
                         className="d-block w-100"
                         alt={`${model.username} image`}

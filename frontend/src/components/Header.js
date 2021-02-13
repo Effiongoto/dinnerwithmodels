@@ -74,6 +74,9 @@ const Header = () => {
                   <LinkContainer to='/admin/verifyTransaction'>
                     <NavDropdown.Item>Verify Transaction</NavDropdown.Item>
                   </LinkContainer>
+                  <LinkContainer to='/admin/carousel'>
+                    <NavDropdown.Item>Home Carousels</NavDropdown.Item>
+                  </LinkContainer>
                   {/* <LinkContainer to='admin/orderlist'>
                     <NavDropdown.Item>Orders</NavDropdown.Item>
                   </LinkContainer> */}
