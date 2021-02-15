@@ -8,6 +8,7 @@ import {
   Button,
   Carousel,
   Image,
+  Form,
 } from 'react-bootstrap';
 import Model from '../components/Model';
 import Message from '../components/Message';
@@ -146,9 +147,20 @@ const HomeScreen = ({ match, history }) => {
       return { ...prevValues, [name]: value };
     });
     setModelsList([
-      ...models.filter((models) => models.city.toLowerCase().includes(value)),
+      ...modelsList.filter((models) =>
+        models.city.toLowerCase().includes(value)
+      ),
     ]);
     setFilterStatus(true);
+  };
+
+  const resetFilter = () => {
+    setFilterStatus(false);
+    setFilter({
+      country: '',
+      state: '',
+      city: '',
+    });
   };
 
   const buttonHandler = (evt) => {
@@ -170,7 +182,7 @@ const HomeScreen = ({ match, history }) => {
 
   return (
     <>
-      <Carousel interval={300000} className='home-carousel'>
+      <Carousel interval={3000} className='home-carousel'>
         {Object.keys(carousel)
           .filter((item) => carousel[item] !== undefined)
           .map((item, index) => (
@@ -202,7 +214,7 @@ const HomeScreen = ({ match, history }) => {
       {gender && (
         <div>
           <br />
-          <ButtonGroup size='sm' className='justify-content-md-center'>
+          {/* <ButtonGroup size='sm' className='justify-content-md-center'>
             <Button
               size='sm-4'
               as={CountryDropdown}
@@ -222,15 +234,56 @@ const HomeScreen = ({ match, history }) => {
               State
             </Button>
             <input
+                name='city'
+                type='text'
+                placeholder='City'
+                onChange={cityFilter}
+              />
+            <input
               name='city'
               type='text'
               placeholder='City'
               onChange={cityFilter}
             />
-            <Button onClick={() => setFilterStatus(false)}>
-              <i className='fas fa-undo' style={{ color: 'white' }}></i>
-            </Button>
-          </ButtonGroup>
+          </ButtonGroup> */}
+          <Form>
+            <Form.Row>
+              <Form.Group as={Col} md='2' controlId='country'>
+                <Form.Control
+                  as={CountryDropdown}
+                  type='text'
+                  priorityOptions={['NGN']}
+                  placeholder='Select Country'
+                  name='country'
+                  value={filter.country}
+                  onChange={(country) => countryFilter(country)}
+                />
+              </Form.Group>
+              <Form.Group as={Col} md='2' controlId='state'>
+                <Form.Control
+                  as={RegionDropdown}
+                  country={filter.country}
+                  type='text'
+                  defaultOptionLabel={'Select state'}
+                  name='state'
+                  value={filter.state}
+                  onChange={(state) => stateFilter(state)}
+                />
+              </Form.Group>
+              <Form.Group as={Col} md='2' controlId='city'>
+                <Form.Control
+                  type='text'
+                  placeholder='City'
+                  name='city'
+                  value={filter.city}
+                  onChange={cityFilter}
+                />
+              </Form.Group>
+            </Form.Row>
+          </Form>
+          <Button onClick={resetFilter}>
+            <i className='fas fa-undo' style={{ color: 'white' }}></i>
+          </Button>
         </div>
       )}
       <Row>
@@ -246,7 +299,7 @@ const HomeScreen = ({ match, history }) => {
                 models && models.length !== 0 ? (
                   <Row>
                     {models.map((model) => (
-                      <Col key={model._id} sm={12} md={6} lg={4} xl={3}>
+                      <Col key={model._id} sm={12} md={6} lg={4} xl={4}>
                         <Model model={model} />
                       </Col>
                     ))}
@@ -257,7 +310,7 @@ const HomeScreen = ({ match, history }) => {
               ) : modelsList && modelsList.length !== 0 ? (
                 <Row>
                   {modelsList.map((model) => (
-                    <Col key={model._id} sm={12} md={6} lg={4} xl={3}>
+                    <Col key={model._id} sm={12} md={6} lg={4} xl={4}>
                       <Model model={model} />
                     </Col>
                   ))}

@@ -51,6 +51,15 @@ h3 {
   margin: 0.2rem;
 }
 
+.card img {
+  height: 200px;
+  object-fit: contain;
+}
+
+.card-body {
+  padding: 1.25rem 0.5rem;
+}
+
 #besucherzaehler2 {
   display: flex;
   justify-content: center;
