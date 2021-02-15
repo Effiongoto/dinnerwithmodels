@@ -50,9 +50,8 @@ const HomeScreen = ({ match, history }) => {
       image: "/images/1.jpeg",
       text: <Link to="/register/model">Sign up as a model ;)</Link>,
     },
-    maleModelOfTheDay: "",
-    femaleModelOfTheDay: "",
-    other: undefined,
+    maleModelOfTheDay: undefined,
+    femaleModelOfTheDay: undefined,
   };
 
   if (models.length !== 0) {
@@ -90,22 +89,24 @@ const HomeScreen = ({ match, history }) => {
       highestRatedFemaleModels[
         Math.floor(Math.random() * highestRatedFemaleModels.length)
       ];
-    carousel.maleModelOfTheDay = {
-      image: maleModelOfTheDay.profileImage,
-      text: "Male model of the day",
-    };
-    carousel.femaleModelOfTheDay = {
-      image: femaleModelOfTheDay.profileImage,
-      text: " Female model of the day",
-    };
+    if (maleModelOfTheDay !== undefined) {
+      carousel.maleModelOfTheDay = {
+        image: maleModelOfTheDay.profileImage,
+        text: "Male model of the day",
+      };
+    }
+    if (femaleModelOfTheDay !== undefined) {
+      carousel.femaleModelOfTheDay = {
+        image: femaleModelOfTheDay.profileImage,
+        text: " Female model of the day",
+      };
+    }
   }
 
   const carouselList = useSelector((state) => state.carouselList);
   const { carousels } = carouselList;
-  console.log("caro", carousels);
   const adminCarousels = {};
   if (carousels && carousels.length !== 0) {
-    console.log("not zero");
     for (let i = 0; i < carousels.length; i++) {
       adminCarousels[carousels[i].name] = {
         image: carousels[i].image,

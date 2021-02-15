@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getCarouselDetails, updateCarousel } from "../actions/carouselActions";
 import axios from "axios";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import FormContainer from "../components/FormContainer";
 
 const CarouselEditScreen = ({ match, history }) => {
   const carouselId = match.params.id;
@@ -75,46 +76,57 @@ const CarouselEditScreen = ({ match, history }) => {
   };
 
   return (
-    <Container>
-      <h2>Edit Carousel</h2>
-      {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
-      <Form>
-        <Form.Group>
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            onChange={handleChange}
-            name="name"
-            type="text"
-            placeholder="Enter a name for your Carousel"
-            value={carousel.name}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Text</Form.Label>
-          <Form.Control
-            onChange={handleChange}
-            name="text"
-            type="text"
-            placeholder="Enter Carousel Text to be displayed"
-            value={carousel.text}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Carousel Image</Form.Label>
-          <Form.Control type="text" value={carousel.image}></Form.Control>
-          <Form.File
-            name="image"
-            label="Choose File"
-            custom
-            onChange={uploadFileHandler}
-          />
-        </Form.Group>
-        <Button className="btn-md btn-dark" onClick={submitHandler}>
-          Update
-        </Button>
-      </Form>
-    </Container>
+    <div>
+      <Link to="/admin/carousel" className="btn btn-light">
+        Go Back
+      </Link>
+      <FormContainer>
+        <h2>Edit Carousel</h2>
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message variant="danger">{error}</Message>
+        ) : (
+          <Form>
+            <Form.Group>
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                onChange={handleChange}
+                name="name"
+                type="text"
+                placeholder="Enter a name for your Carousel"
+                value={carousel.name}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Text</Form.Label>
+              <Form.Control
+                onChange={handleChange}
+                name="text"
+                type="text"
+                placeholder="Enter Carousel Text to be displayed"
+                value={carousel.text}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Carousel Image</Form.Label>
+              <Form.Control type="text" value={carousel.image}></Form.Control>
+              <Form.File
+                name="image"
+                label="Choose File"
+                custom
+                onChange={uploadFileHandler}
+              />
+            </Form.Group>
+            <Button className="btn-md btn-dark" onClick={submitHandler}>
+              Update
+            </Button>
+          </Form>
+        )}
+      </FormContainer>
+    </div>
   );
 };
 
