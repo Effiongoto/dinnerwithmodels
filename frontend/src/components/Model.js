@@ -5,7 +5,12 @@ import Rating from './Rating';
 
 const Model = ({ model }) => {
   return (
-    <Card className='my-3 p-3 rounded'>
+    <Card
+      className='my-3 p-3 rounded'
+      style={{
+        minWidth: 200,
+      }}
+    >
       <Link to={`/model/${model._id}`}>
         <Card.Img src={model.profileImage} variant='top' />
       </Link>
