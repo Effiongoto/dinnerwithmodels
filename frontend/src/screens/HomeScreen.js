@@ -48,7 +48,7 @@ const HomeScreen = ({ match, history }) => {
 
   const carousel = {
     signup: {
-      image: '/images/1.jpeg',
+      image: '/images/2.jpg',
       text: (
         <Link to='/register/model' className='btn btn-success'>
           Sign up as a model
@@ -214,38 +214,7 @@ const HomeScreen = ({ match, history }) => {
       {gender && (
         <div>
           <br />
-          {/* <ButtonGroup size='sm' className='justify-content-md-center'>
-            <Button
-              size='sm-4'
-              as={CountryDropdown}
-              priorityOptions={['NG']}
-              value={filter.country}
-              onChange={(country) => countryFilter(country)}
-            >
-              Country
-            </Button>
-            <Button
-              as={RegionDropdown}
-              country={filter.country}
-              defaultOptionLabel={'Select state'}
-              value={filter.state}
-              onChange={(state) => stateFilter(state)}
-            >
-              State
-            </Button>
-            <input
-                name='city'
-                type='text'
-                placeholder='City'
-                onChange={cityFilter}
-              />
-            <input
-              name='city'
-              type='text'
-              placeholder='City'
-              onChange={cityFilter}
-            />
-          </ButtonGroup> */}
+
           <Form>
             <Form.Row>
               <Form.Group as={Col} md='2' controlId='country'>
@@ -327,7 +296,7 @@ const HomeScreen = ({ match, history }) => {
             <Col md={3}>
               <TwitterTimelineEmbed
                 sourceType='profile'
-                screenName='saurabhnemade'
+                screenName='dinnerwithmodel'
                 options={{ height: 600 }}
               />
             </Col>

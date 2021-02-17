@@ -39,12 +39,16 @@ h1 {
 
 h2 {
   font-size: 1.4rem;
-  padding: 0.5rem 0;
+  padding: 0.8rem 0;
 }
 
 h3 {
   font-size: 1.2rem;
-  padding: 1rem 0;
+  padding: 0.6rem 0;
+}
+p {
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
 }
 
 .review-number {
@@ -60,12 +64,6 @@ h3 {
   padding: 1.25rem 0.5rem;
 }
 
-#besucherzaehler2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 /* carousel */
 .carousel-item-next,
 .carousel-item-prev,
@@ -76,6 +74,13 @@ h3 {
   position: absolute;
   top: 0%;
   transform: translateY(50%);
+}
+.carousel-caption h4 a {
+  color: white;
+}
+
+.carousel-caption h4 {
+  color: #111;
 }
 .carousel-inner {
   max-width: 40%;
@@ -98,13 +103,14 @@ h3 {
   }
   .carousel-caption .btn {
     font-size: 15px;
+    line-height: 1rem;
   }
 }
-@media only screen and (max-width: 1200px) {
+/* @media only screen and (max-width: 1200px) {
   h3 {
     font-size: 0.9rem;
   }
-}
+} */
 @media only screen and (max-width: 990px) {
   .carousel-caption h4 {
     font-size: 12px;
@@ -113,22 +119,28 @@ h3 {
     font-size: 12px;
   }
   .carousel-inner {
-    max-width: 50%;
+    max-width: 60%;
   }
 }
-@media only screen and (max-width: 760px) {
+@media only screen and (max-width: 780px) {
   .carousel-caption {
     right: 15% !important;
     left: 40% !important;
+    max-width: 200px;
+  }
+  .carousel-inner {
+    max-width: 70%;
   }
 }
 @media only screen and (max-width: 600px) {
   .carousel-inner {
-    max-width: 50%;
+    max-width: 70%;
   }
   .carousel-caption {
     right: 2% !important;
     left: 30% !important;
+    max-width: 150px;
+    transform: translate(20%, 50%);
   }
 }
 @media only screen and (max-width: 500px) {
@@ -141,29 +153,36 @@ h3 {
   .carousel-caption {
     right: 20% !important;
     left: 20% !important;
+    transform: translate(12%, 50%);
   }
 }
 
 @media only screen and (max-width: 490px) {
   h1 {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
   }
 
   h2 {
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
   h3 {
-    font-size: 0.6rem;
+    font-size: 0.9rem;
+  }
+  p {
+    font-size: 0.7rem;
+    padding: 0.2rem 0;
+    margin-bottom: 0.3rem;
   }
 }
 @media only screen and (max-width: 400px) {
   .carousel-caption {
     right: 0% !important;
     left: 0% !important;
-    transform: translate(2%, 60%);
+    transform: translate(25%, 60%);
   }
   .carousel-caption h4 {
     font-size: 12px;
+    max-width: 200px;
   }
   .carousel-caption .btn {
     font-size: 12px;
@@ -187,7 +206,7 @@ h3 {
   .carousel-caption {
     right: 0% !important;
     left: 0% !important;
-    transform: translate(1%, 70%);
+    transform: translate(43%, 70%);
     padding: 3px;
   }
 }

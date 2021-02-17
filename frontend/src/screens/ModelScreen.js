@@ -128,9 +128,11 @@ const ModelScreen = ({ match, history }) => {
                   alt={model.username}
                   fluid
                   style={{
-                    height: '10%',
+                    height: 300,
                     marginRight: 20,
                     marginBottom: 20,
+                    marginLeft: 20,
+                    borderRadius: '20%',
                   }}
                 />
               </Row>
@@ -152,6 +154,7 @@ const ModelScreen = ({ match, history }) => {
               <Rating
                 value={model.rating}
                 text={`from ${model.numReviews} reviews`}
+                className='pb-1'
               />
               <p>
                 <strong>
@@ -181,7 +184,11 @@ const ModelScreen = ({ match, history }) => {
               {userInfo &&
               userInfo.isSubscribed &&
               userInfo.isSubscribed.status === 'active' ? (
-                <Row>
+                <Row
+                  style={{
+                    marginLeft: 20,
+                  }}
+                >
                   {model.privateImages &&
                     model.privateImages.map((img) => (
                       <Image
@@ -209,7 +216,13 @@ const ModelScreen = ({ match, history }) => {
                 </p>
               )}
 
-              <h3 className='mt-5'>Contact Info</h3>
+              <h3
+                style={{
+                  lineHeight: '0',
+                }}
+              >
+                Contact Info
+              </h3>
               {userInfo &&
               userInfo.modelsPaidFor.find((x) => x.name === model.username) ? (
                 <>
@@ -220,7 +233,11 @@ const ModelScreen = ({ match, history }) => {
                   <p>Whatsapp Number: {model.whatsappNumber}</p>
                 </>
               ) : (
-                <p>
+                <p
+                  style={{
+                    lineHeight: '1.5rem',
+                  }}
+                >
                   To buy model's phone number for N5,000{' '}
                   <Button
                     type='button'
