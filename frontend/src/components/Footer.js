@@ -18,7 +18,7 @@ const Footer = () => {
           </Col>
         </Row>
         <Row>
-          <Col className='text-center'>
+          <Col className='text-center pb-3'>
             Designed by{' '}
             <a href={'https://www.oto.com.ng/'} style={{ color: 'white' }}>
               Oto Effiong

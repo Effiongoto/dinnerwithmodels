@@ -34,7 +34,8 @@ const getModels = asyncHandler(async (req, res) => {
   });
   const models = await Model.find({ ...keyword, ...gender, ...verified })
     .limit(pageSize)
-    .skip(pageSize * (page - 1));
+    .skip(pageSize * (page - 1))
+    .select('-password');
 
   res.json({ models, page, pages: Math.ceil(count / pageSize) });
 });
