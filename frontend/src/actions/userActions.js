@@ -269,7 +269,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.patch(`/api/users/${user._id}`, user, config);
+    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
 
     dispatch({ type: USER_UPDATE_SUCCESS });
 
@@ -366,6 +366,7 @@ export const userSubscribe = (id) => async (dispatch, getState) => {
           planCode: sub.planCode,
           emailToken: sub.emailToken,
           reference: sub.reference,
+          nextPaymentDate: sub.nextPaymentDate,
         },
       },
       config

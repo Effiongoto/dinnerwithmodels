@@ -154,6 +154,8 @@ export const disableSub = (sub, id, user) => async (dispatch, getState) => {
       config
     );
 
+    console.log(data);
+
     dispatch({
       type: ADMIN_DISABLE_SUB_SUCCESS,
       payload: data,

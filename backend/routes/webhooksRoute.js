@@ -11,24 +11,48 @@ router.post("/", async (req, res) => {
     .digest("hex");
   if (hash === req.headers["x-paystack-signature"]) {
     const event = req.body;
-    const email = event.data.customer.email;
-    const planCode = event.data.plan.plan_code;
-    const user = await User.findOne({ email });
-    if (user) {
-      if (user.isSubscribed.planCode === planCode) {
-        if (event.event === "charge.success") {
+    if (event.event === "charge.success") {
+      const email = event.data.customer.email;
+      const planCode = event.data.plan.plan_code;
+      const user = await User.findOne({ email });
+      if (user) {
+        if (user.isSubscribed.planCode === planCode) {
           user.isSubscribed = {
             ...user.isSubscribed,
             reference: event.data.reference,
           };
-        } else {
+
+          await user.save();
+        }
+      }
+    }
+
+    if (event.event === "invoice.update") {
+      const email = event.data.customer.email;
+      const subCode = event.data.subscription.subscription_code;
+      const user = await User.findOne({ email });
+      if (user) {
+        if (user.isSubscribed.subCode === subCode && event.data.paid === true) {
           user.isSubscribed = {
             ...user.isSubscribed,
-            status: "inactive",
-            reference: event.data.reference,
+            status: "active",
+            nextPaymentDate: event.data.subscription.next_payment_date,
+            reference: event.data.transaction.reference,
           };
         }
-        await user.save();
+      }
+    }
+
+    if (event.event === "invoice.payment_failed") {
+      const email = event.data.customer.email;
+      const subCode = event.data.subscription.subscription_code;
+      const user = await User.findOne({ email });
+      if (user.isSubscribed.subCode === subCode && event.data.paid === false) {
+        user.isSubscribed = {
+          ...user.isSubscribed,
+          status: "inactive",
+          emailToken: event.data.subscription.email_token,
+        };
       }
     }
   }

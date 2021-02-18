@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const subscriptionSchema = mongoose.Schema(
   {
@@ -11,14 +11,17 @@ const subscriptionSchema = mongoose.Schema(
       required: true,
     },
     planCode: {
-      type: String
+      type: String,
     },
     reference: {
-      type: String
+      type: String,
     },
     emailToken: {
       type: String,
       required: true,
+    },
+    nextPaymentDate: {
+      type: String,
     },
     amount: {
       type: Number,
@@ -37,6 +40,6 @@ const subscriptionSchema = mongoose.Schema(
   }
 );
 
-const Subscription = mongoose.model('Subscription', subscriptionSchema);
+const Subscription = mongoose.model("Subscription", subscriptionSchema);
 
 export default Subscription;
