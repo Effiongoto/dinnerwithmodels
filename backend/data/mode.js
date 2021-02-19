@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+const bcrypt = require('bcryptjs');
 
 const mode = [
   {
@@ -30,4 +30,4 @@ const mode = [
   },
 ];
 
-export default mode;
+module.exports = mode;

@@ -1,17 +1,17 @@
-import express from "express";
-import crypto from "crypto";
-import User from "../models/userModel.js";
+const express = require('express');
+const crypto = require('crypto');
+const User = require('../models/userModel.js');
 const router = express.Router();
 
 // use the webhooks to check subscriptions.
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   const hash = crypto
-    .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY)
+    .createHmac('sha512', process.env.PAYSTACK_SECRET_KEY)
     .update(JSON.stringify(req.body))
-    .digest("hex");
-  if (hash === req.headers["x-paystack-signature"]) {
+    .digest('hex');
+  if (hash === req.headers['x-paystack-signature']) {
     const event = req.body;
-    if (event.event === "charge.success") {
+    if (event.event === 'charge.success') {
       const email = event.data.customer.email;
       const planCode = event.data.plan.plan_code;
       const user = await User.findOne({ email });
@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
       }
     }
 
-    if (event.event === "invoice.update") {
+    if (event.event === 'invoice.update') {
       const email = event.data.customer.email;
       const subCode = event.data.subscription.subscription_code;
       const user = await User.findOne({ email });
@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
         if (user.isSubscribed.subCode === subCode && event.data.paid === true) {
           user.isSubscribed = {
             ...user.isSubscribed,
-            status: "active",
+            status: 'active',
             nextPaymentDate: event.data.subscription.next_payment_date,
             reference: event.data.transaction.reference,
           };
@@ -43,14 +43,14 @@ router.post("/", async (req, res) => {
       }
     }
 
-    if (event.event === "invoice.payment_failed") {
+    if (event.event === 'invoice.payment_failed') {
       const email = event.data.customer.email;
       const subCode = event.data.subscription.subscription_code;
       const user = await User.findOne({ email });
       if (user.isSubscribed.subCode === subCode && event.data.paid === false) {
         user.isSubscribed = {
           ...user.isSubscribed,
-          status: "inactive",
+          status: 'inactive',
           emailToken: event.data.subscription.email_token,
         };
       }
@@ -59,4 +59,5 @@ router.post("/", async (req, res) => {
   res.send(200);
 });
 
-export default router;
+module.exports = router;
+

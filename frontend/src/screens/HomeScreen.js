@@ -136,12 +136,23 @@ const HomeScreen = ({ match, history }) => {
   };
 
   const stateFilter = (value) => {
+    setFilterStatus(false);
+    setFilter({
+      ...filter,
+      state: '',
+      city: '',
+    });
     setFilter({ ...filter, state: value });
     setModelsList([...modelsList.filter((models) => models.state === value)]);
     setFilterStatus(true);
   };
 
   const cityFilter = (event) => {
+    setFilterStatus(false);
+    setFilter({
+      ...filter,
+      city: '',
+    });
     const { name, value } = event.target;
     setFilter((prevValues) => {
       return { ...prevValues, [name]: value };
@@ -155,6 +166,12 @@ const HomeScreen = ({ match, history }) => {
   };
 
   const resetFilter = () => {
+    setFilterStatus(false);
+    setFilter({
+      country: '',
+      state: '',
+      city: '',
+    });
     setFilterStatus(false);
     setFilter({
       country: '',

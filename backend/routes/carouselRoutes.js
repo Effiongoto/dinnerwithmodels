@@ -1,22 +1,22 @@
-import express from "express";
-import { admin, protect } from "../middleware/authMiddleware.js";
-import {
+const express = require('express');
+const { admin, protect } = require('../middleware/authMiddleware.js');
+const {
   getCarousels,
   getCarouselById,
   createCarousel,
   updateCarousel,
   deleteCarousel,
-} from "../controllers/carouselController.js";
+} = require('../controllers/carouselController.js');
 const router = express.Router();
 
 router
-  .route("/")
-  .get(protect, getCarousels)
+  .route('/')
+  .get(protect, admin, getCarousels)
   .post(protect, admin, createCarousel);
 router
-  .route("/:id")
+  .route('/:id')
   .get(protect, admin, getCarouselById)
   .patch(protect, admin, updateCarousel)
   .delete(protect, admin, deleteCarousel);
 
-export default router;
+module.exports = router;

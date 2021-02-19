@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 
 const carouselSchema = mongoose.Schema({
   name: {
@@ -17,6 +17,6 @@ const carouselSchema = mongoose.Schema({
   },
 });
 
-const Carousel = mongoose.model("Carousel", carouselSchema);
+const Carousel = mongoose.model('Carousel', carouselSchema);
 
-export default Carousel;
+module.exports = Carousel;

@@ -19,6 +19,7 @@ const CarouselListScreen = ({ history }) => {
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listCarousels());
+      console.log(carousels);
     } else {
       history.push('/login');
     }

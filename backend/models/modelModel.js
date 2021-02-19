@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const reviewSchema = mongoose.Schema(
   {
@@ -9,7 +9,7 @@ const reviewSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User",
+      ref: 'User',
     },
   },
   {
@@ -103,7 +103,7 @@ const modelSchema = mongoose.Schema(
     phoneNumber1: {
       type: Number,
       required: true,
-      default: "",
+      default: '',
     },
     phoneNumber2: {
       type: Number,
@@ -139,8 +139,8 @@ modelSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-modelSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+modelSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
     next();
   }
 
@@ -148,6 +148,6 @@ modelSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-const Model = mongoose.model("Model", modelSchema);
+const Model = mongoose.model('Model', modelSchema);
 
-export default Model;
+module.exports = Model;

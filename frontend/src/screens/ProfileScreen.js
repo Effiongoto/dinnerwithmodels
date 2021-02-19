@@ -53,6 +53,7 @@ const ProfileScreen = ({ location, history }) => {
           _id: userDetail._id,
         });
       }
+      console.log(userDetail.isSubscribed);
     }
   }, [dispatch, history, userInfo, userDetail, success]);
 
@@ -161,26 +162,25 @@ const ProfileScreen = ({ location, history }) => {
           {userDetail.isSubscribed &&
             userDetail.isSubscribed.status === "active" && (
               <Form.Group>
-                <Message variant="warning">
-                  Note: Subscription is automatically renewed every month To
-                  cancel auto renewal of monthly subscription, uncheck the box
-                  below
-                </Message>
-                <Message variant="info">
-                  Your next payment would be on{" "}
+                <Message variant='info'>
+                  Your next payment would be on{' '}
                   {new Date(
                     userDetail.isSubscribed.nextPaymentDate
                   ).toDateString()}
                 </Message>
+                <Message variant='warning'>
+                  Note: Subscription is automatically renewed once it expires.
+                  To cancel subscription, uncheck the box below. You will still
+                </Message>
                 <Form.Check
-                  type="checkbox"
-                  label="Auto Renewal?"
+                  type='checkbox'
+                  label='Auto Renewal?'
                   checked={
-                    user.isSubscribed && user.isSubscribed.status === "active"
+                    user.isSubscribed && user.isSubscribed.status === 'active'
                       ? true
                       : false
                   }
-                  name="isSubscribed"
+                  name='isSubscribed'
                   onChange={handleCheck}
                   value={user.isSubscribed}
                 ></Form.Check>
