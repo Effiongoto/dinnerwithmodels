@@ -187,7 +187,7 @@ const RegisterScreen = ({ history }) => {
             <Form.Control
               as={CountryDropdown}
               type="text"
-              priorityOptions={["NGN"]}
+              priorityOptions={["NG"]}
               placeholder="Country"
               name="country"
               value={newModel.country}
