@@ -1,7 +1,7 @@
-import asyncHandler from "express-async-handler";
-import User from "../models/userModel.js";
-import generateToken from "../utils/generateToken.js";
-import axios from "axios";
+const asyncHandler = require('express-async-handler');
+const User = require('../models/userModel.js');
+const generateToken = require('../utils/generateToken.js');
+const axios = require('axios');
 
 // @desc    Update user to paid
 // @route   GET /api/payment/:id/pay
@@ -15,7 +15,7 @@ const updateUserToPaid = asyncHandler(async (req, res) => {
         },
       })
       .then(async (response) => {
-        if (response.data.message === "Verification successful") {
+        if (response.data.message === 'Verification successful') {
           const user = await User.findById(req.params.id);
           if (user) {
             user.modelsPaidFor =
@@ -36,7 +36,7 @@ const updateUserToPaid = asyncHandler(async (req, res) => {
             });
           } else {
             res.status(404);
-            throw new Error("User not found");
+            throw new Error('User not found');
           }
         }
       });
@@ -93,7 +93,7 @@ const updateUserToSubscribed = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 
   // if (user) {
@@ -121,7 +121,7 @@ const updateUserToSubscribed = asyncHandler(async (req, res) => {
 // @route   GET /api/payment/verify/:ref
 // @access  Private/Admin
 const verifyTransaction = asyncHandler(async (req, res) => {
-  console.log("params", req.params);
+  console.log('params', req.params);
   try {
     axios
       .get(`https://api.paystack.co/transaction/verify/${req.params.ref}`, {
@@ -131,7 +131,7 @@ const verifyTransaction = asyncHandler(async (req, res) => {
       })
       .then((resp) => {
         console.log(resp.data.data);
-        if (resp.data.message === "Verification successful") {
+        if (resp.data.message === 'Verification successful') {
           const details = resp.data.data;
           res.json(details);
         }
@@ -142,4 +142,8 @@ const verifyTransaction = asyncHandler(async (req, res) => {
   }
 });
 
-export { updateUserToPaid, updateUserToSubscribed, verifyTransaction };
+module.exports = {
+  updateUserToPaid,
+  updateUserToSubscribed,
+  verifyTransaction,
+};

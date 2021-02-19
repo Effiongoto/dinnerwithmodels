@@ -1,6 +1,6 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import {
+const {
   getModels,
   getAllModels,
   getModelById,
@@ -11,8 +11,12 @@ import {
   deleteModel,
   updateModel,
   createModelReview,
-} from '../controllers/modelController.js';
-import { modelProtect, admin, protect } from '../middleware/authMiddleware.js';
+} = require('../controllers/modelController.js');
+const {
+  modelProtect,
+  admin,
+  protect,
+} = require('../middleware/authMiddleware.js');
 
 router.route('/').get(getModels).post(registerModel);
 router.route('/all').get(getAllModels);
@@ -28,4 +32,4 @@ router
   .delete(protect, admin, deleteModel)
   .put(protect, admin, updateModel);
 
-export default router;
+module.exports = router;

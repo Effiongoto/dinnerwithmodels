@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+const bcrypt = require('bcryptjs');
 
 const models = [
   {
@@ -283,4 +283,4 @@ const models = [
   },
 ];
 
-export default models;
+module.exports = models;

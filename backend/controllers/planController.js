@@ -1,6 +1,6 @@
-import asyncHandler from "express-async-handler";
-import Plan from "../models/planModel.js";
-import axios from "axios";
+const asyncHandler = require('express-async-handler');
+const Plan = require('../models/planModel.js');
+const axios = require('axios');
 
 // @desc View plans
 // @route GET /api/payment/plans
@@ -18,7 +18,7 @@ const getPlanById = asyncHandler(async (req, res) => {
   if (plan) {
     res.json(plan);
   } else {
-    throw new Error("Plan not found");
+    throw new Error('Plan not found');
   }
 });
 
@@ -31,7 +31,7 @@ const createPlan = asyncHandler(async (req, res) => {
       .post(`https://api.paystack.co/plan`, req.body.plan, {
         headers: {
           Authorization: process.env.PAYSTACK_SECRET_KEY,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       })
       .then(async (resp) => {
@@ -47,7 +47,7 @@ const createPlan = asyncHandler(async (req, res) => {
         const planExists = await Plan.findOne({ name });
         if (planExists) {
           res.status(400);
-          throw new Error("Plan already exists");
+          throw new Error('Plan already exists');
         }
         const plan = await Plan.create({
           name,
@@ -58,7 +58,7 @@ const createPlan = asyncHandler(async (req, res) => {
           createdAt,
         });
         if (plan) {
-          console.log("planCreated", plan);
+          console.log('planCreated', plan);
           res.status(200).json(plan);
         }
       });
@@ -106,7 +106,7 @@ const updatePlan = asyncHandler(async (req, res) => {
         {
           headers: {
             Authorization: process.env.PAYSTACK_SECRET_KEY,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       )
@@ -122,7 +122,8 @@ const updatePlan = asyncHandler(async (req, res) => {
             res.json(plan);
           } else {
             res.status(404);
-            throw new Error("Plan not found");s
+            throw new Error('Plan not found');
+            s;
           }
         }
       });
@@ -152,16 +153,16 @@ const updatePlan = asyncHandler(async (req, res) => {
 const deletePlan = asyncHandler(async (req, res) => {
   const plan = await Plan.findByIdAndDelete(req.params.id, (err) => {
     if (!err) {
-      res.status(200).json({ message: "Plan Deleted" });
+      res.status(200).json({ message: 'Plan Deleted' });
     } else {
       res.status(404);
-      throw new Error("Plan delete failed");
+      throw new Error('Plan delete failed');
     }
   });
   if (!plan) {
     res.status(404);
-    throw new Error("Plan not found");
+    throw new Error('Plan not found');
   }
 });
 
-export { getPlans, getPlanById, createPlan, updatePlan, deletePlan };
+module.exports = { getPlans, getPlanById, createPlan, updatePlan, deletePlan };

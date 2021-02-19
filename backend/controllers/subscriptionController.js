@@ -1,7 +1,7 @@
-import asyncHandler from "express-async-handler";
-import Subscription from "../models/subscriptionModel.js";
-import _ from "lodash";
-import axios from "axios";
+const asyncHandler = require('express-async-handler');
+const Subscription = require('../models/subscriptionModel.js');
+const _ = require('lodash');
+const axios = require('axios');
 
 // @desc View subscriptions
 // @route GET /api/payment/subscriptions
@@ -20,7 +20,7 @@ const getSubById = asyncHandler(async (req, res) => {
   if (sub) {
     res.json(sub);
   } else {
-    throw new Error("Subscription not found");
+    throw new Error('Subscription not found');
   }
 });
 
@@ -36,13 +36,13 @@ const createSub = asyncHandler(async (req, res) => {
         },
       })
       .then((resp) => {
-        if (resp.data.message === "Verification successful") {
+        if (resp.data.message === 'Verification successful') {
           try {
             axios
-              .post("https://api.paystack.co/subscription", req.body.sub, {
+              .post('https://api.paystack.co/subscription', req.body.sub, {
                 headers: {
                   Authorization: process.env.PAYSTACK_SECRET_KEY,
-                  "Content-Type": "application/json",
+                  'Content-Type': 'application/json',
                 },
               })
               .then(async (response) => {
@@ -61,11 +61,11 @@ const createSub = asyncHandler(async (req, res) => {
 
                 if (subExists) {
                   res.status(404);
-                  throw new Error("Subscription already exists");
+                  throw new Error('Subscription already exists');
                 }
 
                 const sub = await Subscription.create({
-                  user: { ..._.pick(req.body.user, ["_id", "name", "email"]) },
+                  user: { ..._.pick(req.body.user, ['_id', 'name', 'email']) },
                   subCode,
                   planCode: req.body.sub.plan,
                   reference: req.body.reference,
@@ -131,7 +131,7 @@ const enableSub = asyncHandler(async (req, res) => {
     res.json(sub);
   } else {
     res.status(404);
-    throw new Error("Subscription does not exist");
+    throw new Error('Subscription does not exist');
   }
 });
 
@@ -141,23 +141,23 @@ const enableSub = asyncHandler(async (req, res) => {
 const disableSub = asyncHandler(async (req, res) => {
   try {
     axios
-      .post("https://api.paystack.co/subscription/disable", req.body.sub, {
+      .post('https://api.paystack.co/subscription/disable', req.body.sub, {
         headers: {
           Authorization: process.env.PAYSTACK_SECRET_KEY,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       })
       .then(async (response) => {
-        if (response.data.message === "Subscription disabled successfully") {
+        if (response.data.message === 'Subscription disabled successfully') {
           const sub = await Subscription.findById(req.params.id).exec();
           if (sub) {
-            sub.status = "inactive";
+            sub.status = 'inactive';
           }
           const updatedSub = await sub.save();
           res.json(updatedSub);
         } else {
           res.status(404);
-          throw new Error("Disable Subscription Failed");
+          throw new Error('Disable Subscription Failed');
         }
       });
   } catch (error) {
@@ -178,4 +178,4 @@ const disableSub = asyncHandler(async (req, res) => {
   // }
 });
 
-export { getSubs, getSubById, createSub, enableSub, disableSub };
+module.exports = { getSubs, getSubById, createSub, enableSub, disableSub };

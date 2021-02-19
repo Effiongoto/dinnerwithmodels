@@ -1,15 +1,15 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import colors from 'colors';
-import users from './data/users.js';
-import models from './data/models.js';
-import User from './models/userModel.js';
-import Model from './models/modelModel.js';
-import Subscription from './models/subscriptionModel.js';
-import Payment from './models/paymentModel.js';
-import Plan from './models/planModel.js';
-import Carousel from './models/carouselModel.js';
-import connectDB from './config/db.js';
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const colors = require('colors');
+const users = require('./data/users.js');
+const models = require('./data/models.js');
+const User = require('./models/userModel.js');
+const Model = require('./models/modelModel.js');
+const Subscription = require('./models/subscriptionModel.js');
+const Payment = require('./models/paymentModel.js');
+const Plan = require('./models/planModel.js');
+const Carousel = require('./models/carouselModel.js');
+const connectDB = require('./config/db.js');
 
 dotenv.config();
 

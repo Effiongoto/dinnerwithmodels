@@ -1,14 +1,14 @@
-import path from "path";
-import express from "express";
-import multer from "multer";
-import jimp from "jimp";
+const path = require('path');
+const express = require('express');
+const multer = require('multer');
+const jimp = require('jimp');
 // import watermark from "jimp-watermark";
 // import Model from "../models/modelModel.js";
 const router = express.Router();
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, "uploads/");
+    cb(null, 'backend/uploads/');
   },
   filename(req, file, cb) {
     cb(
@@ -26,7 +26,7 @@ function checkFileType(file, cb) {
   if (extname && mimetype) {
     return cb(null, true);
   } else {
-    cb("Images only!", false);
+    cb('Images only!', false);
   }
 }
 
@@ -37,9 +37,9 @@ const upload = multer({
   },
 });
 
-router.post("/", upload.single("image"), async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
   // if (req.body.name.includes("private")) {
-    // const model = await Model.findById(req.body.id).exec();
+  // const model = await Model.findById(req.body.id).exec();
   //   jimp
   //     .read(req.file.path)
   //     .then((tpl) =>
@@ -56,4 +56,4 @@ router.post("/", upload.single("image"), async (req, res) => {
   res.send(`/${req.file.path}`);
 });
 
-export default router;
+module.exports = router;

@@ -1,6 +1,6 @@
-import asyncHandler from 'express-async-handler';
-import generateToken from '../utils/generateToken.js';
-import Model from '../models/modelModel.js';
+const asyncHandler = require('express-async-handler');
+const generateToken = require('../utils/generateToken.js');
+const Model = require('../models/modelModel.js');
 
 // @desc    Fetch models by page
 // @route   GET /api/models
@@ -299,7 +299,7 @@ const createModelReview = asyncHandler(async (req, res) => {
   }
 });
 
-export {
+module.exports = {
   getModels,
   getAllModels,
   getModelById,
