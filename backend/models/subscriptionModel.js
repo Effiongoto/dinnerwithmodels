@@ -20,6 +20,9 @@ const subscriptionSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    nextPaymentDate: {
+      type: String,
+    },
     amount: {
       type: Number,
       required: true,
@@ -37,6 +40,6 @@ const subscriptionSchema = mongoose.Schema(
   }
 );
 
-const Subscription = mongoose.model('Subscription', subscriptionSchema);
+const Subscription = mongoose.model("Subscription", subscriptionSchema);
 
 module.exports = Subscription;

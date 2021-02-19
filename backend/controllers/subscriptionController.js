@@ -50,6 +50,7 @@ const createSub = asyncHandler(async (req, res) => {
                 const {
                   subscription_code: subCode,
                   email_token: emailToken,
+                  next_payment_date: nextPaymentDate,
                   amount,
                   status,
                   createdAt,
@@ -70,6 +71,7 @@ const createSub = asyncHandler(async (req, res) => {
                   planCode: req.body.sub.plan,
                   reference: req.body.reference,
                   emailToken,
+                  nextPaymentDate,
                   amount,
                   status,
                   createdAt,

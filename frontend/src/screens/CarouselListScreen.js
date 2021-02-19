@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import { LinkContainer } from 'react-router-bootstrap';
-import { Image, Button, Table } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { deleteCarousel, listCarousels } from '../actions/carouselActions';
+import React, { useEffect } from "react";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
+import { LinkContainer } from "react-router-bootstrap";
+import { Image, Button, Table } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { deleteCarousel, listCarousels } from "../actions/carouselActions";
 
 const CarouselListScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -19,14 +19,13 @@ const CarouselListScreen = ({ history }) => {
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listCarousels());
-      console.log(carousels);
     } else {
-      history.push('/login');
+      history.push("/login");
     }
   }, [dispatch, userInfo, history]);
 
   const deleteHandler = (id) => {
-    if (window.confirm('Are you sure?')) {
+    if (window.confirm("Are you sure?")) {
       dispatch(deleteCarousel(id));
     }
   };
@@ -37,9 +36,9 @@ const CarouselListScreen = ({ history }) => {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>{error}</Message>
+        <Message variant="danger">{error}</Message>
       ) : (
-        <Table striped bordered hover responsive className='table-sm'>
+        <Table striped bordered hover responsive className="table-sm">
           <thead>
             <tr>
               <th>ID</th>
@@ -61,23 +60,23 @@ const CarouselListScreen = ({ history }) => {
                     alt={carousel.name}
                     fluid
                     style={{
-                      height: '50px',
-                      width: '50px',
+                      height: "50px",
+                      width: "50px",
                     }}
                   />
                 </td>
                 <td>
-                  <LinkContainer to={`/admin/carousels/${carousel._id}/edit`}>
-                    <Button variant='light' className='btn-sm'>
-                      <i className='fas fa-edit'></i>
+                  <LinkContainer to={`/admin/carousel/${carousel._id}/edit`}>
+                    <Button variant="light" className="btn-sm">
+                      <i className="fas fa-edit"></i>
                     </Button>
                   </LinkContainer>
                   <Button
-                    variant='danger'
-                    className='btn-sm'
+                    variant="danger"
+                    className="btn-sm"
                     onClick={() => deleteHandler(carousel._id)}
                   >
-                    <i className='fas fa-trash'></i>
+                    <i className="fas fa-trash"></i>
                   </Button>
                 </td>
               </tr>
@@ -86,7 +85,7 @@ const CarouselListScreen = ({ history }) => {
         </Table>
       )}
       <Link to={`/admin/carousel/add`}>
-        <Button variant='dark' className='btn-sm'>
+        <Button variant="dark" className="btn-sm">
           Create a new Carousel
         </Button>
       </Link>
