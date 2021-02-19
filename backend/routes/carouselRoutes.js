@@ -11,7 +11,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(protect, admin, getCarousels)
+  .get(protect, getCarousels)
   .post(protect, admin, createCarousel);
 router
   .route('/:id')

@@ -20,6 +20,9 @@ const subscriptionSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    nextPaymentDate: {
+      type: String,
+    },
     amount: {
       type: Number,
       required: true,
