@@ -47,7 +47,6 @@ const createSub = asyncHandler(async (req, res) => {
               })
               .then(async (response) => {
                 const subDetails = response.data.data;
-                // console.log('sub details: ', subDetails);
                 const {
                   subscription_code: subCode,
                   email_token: emailToken,
