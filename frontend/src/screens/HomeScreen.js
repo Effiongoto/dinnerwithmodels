@@ -251,7 +251,7 @@ const HomeScreen = ({ match, history }) => {
             </Form.Row>
           </Form>
           <Button onClick={resetFilter}>
-            <i className="fas fa-undo" style={{ color: "white" }}></i>
+            <i className="fas fa-undo"></i>
           </Button>
         </div>
       )}
@@ -263,7 +263,7 @@ const HomeScreen = ({ match, history }) => {
         ) : (
           <>
             <Col md={9}>
-              <h1 style={{ fontFamily: "Imbue" }}>{heading}</h1>
+              <h1>{heading}</h1>
               {!filterStatus ? (
                 models && models.length !== 0 ? (
                   <Row>
@@ -274,7 +274,7 @@ const HomeScreen = ({ match, history }) => {
                     ))}
                   </Row>
                 ) : (
-                  <h1 style={{ fontFamily: "Imbue" }}>No models found :(</h1>
+                  <h1>No models found :(</h1>
                 )
               ) : modelsList && modelsList.length !== 0 ? (
                 <Row>
@@ -285,7 +285,7 @@ const HomeScreen = ({ match, history }) => {
                   ))}
                 </Row>
               ) : (
-                <h1 style={{ fontFamily: "Imbue" }}>No models found :(</h1>
+                <h1>No models found :(</h1>
               )}
               <Paginate
                 pages={pages}

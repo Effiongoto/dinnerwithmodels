@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import Header from "./components/Header";
@@ -28,13 +28,51 @@ import VerifyTransactionScreen from "./screens/VerifyTransactionScreen";
 import CarouselListScreen from "./screens/CarouselListScreen";
 import AddCarouselScrren from "./screens/AddCarouselScreen";
 import CarouselEditScreen from "./screens/CarouselEditScreen";
+import DarkModeButton from "./components/DarkModeButton";
 
 const App = () => {
+  const getCookie = (name) => {
+    const theme = `${name}=`;
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookies = decodedCookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i];
+      while (cookie.charAt(0) === " ") {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(theme) === 0) {
+        return cookie.substring(theme.length, cookie.length);
+      }
+    }
+    return "";
+  };
+
+  const [theme, setTheme] = useState(null);
+
+  useEffect(() => {
+    const currentTheme = getCookie("theme");
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    if (currentTheme === "light") {
+      document.body.classList.toggle("light-theme");
+      setTheme("dark");
+    } else if (currentTheme === "dark") {
+      document.body.classList.toggle("dark-theme");
+      setTheme("light");
+    } else if (prefersDarkScheme.matches) {
+      document.body.classList.toggle("dark-theme");
+      setTheme("light");
+    } else {
+      document.body.classList.toggle("dark-theme");
+      setTheme("light");
+    }
+  }, []);
+
   return (
     <Router>
       <Header />
       <main className="py-3">
         <Container>
+          <DarkModeButton mode={theme} />
           <Route path="/login" component={LoginScreen} exact />
           <Route path="/register" component={RegisterScreen} exact />
           <Route path="/pay/:id" component={PaymentScreen} exact />
