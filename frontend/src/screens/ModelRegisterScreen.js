@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,11 +6,13 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 import { register } from "../actions/modelActions";
+import DatePicker from "react-carbon-datepicker";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 
 const RegisterScreen = ({ history }) => {
   const [message, setMessage] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
+  const date = useRef();
 
   const [newModel, setNewModel] = useState({
     username: "",
@@ -47,6 +49,8 @@ const RegisterScreen = ({ history }) => {
   }, [history, modelInfo]);
 
   const handleChange = (evt) => {
+    console.log(date);
+    console.log(evt);
     setNewModel({
       ...newModel,
       [evt.target.name]: evt.target.value,
@@ -79,6 +83,20 @@ const RegisterScreen = ({ history }) => {
     } else {
       dispatch(register(newModel));
     }
+  };
+
+  const getDateStringFromTimestamp = (timestamp) => {
+    const dateObject = new Date(timestamp);
+    const month = dateObject.getMonth() + 1;
+    const date = dateObject.getDate();
+    return `${dateObject.getFullYear()}-${month < 10 ? `0${month}` : month}-${
+      date < 10 ? `0${date}` : date
+    }`;
+  };
+
+  const setDate = (date) => {
+    const dateString = getDateStringFromTimestamp(date);
+    setNewModel({ ...newModel, DOB: dateString });
   };
 
   return (
@@ -158,13 +176,18 @@ const RegisterScreen = ({ history }) => {
           <Form.Group as={Col} md="6" controlId="DOB">
             <Form.Label>Date of birth</Form.Label>
             <Form.Control
-              type="text"
+              as={DatePicker}
+              config={{
+                themePreset: document.body.classList.contains("dark-theme")
+                  ? "dark"
+                  : "default",
+              }}
+              className="date-picker"
               placeholder="xx-xx-xxxx"
               name="DOB"
               value={newModel.DOB}
-              onChange={handleChange}
+              onChange={(date) => setDate(date)}
             ></Form.Control>
-            <Form.Text className="text-muted">Example: 03-03-1998</Form.Text>
           </Form.Group>
         </Form.Row>
 

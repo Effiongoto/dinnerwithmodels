@@ -24,6 +24,7 @@ const HomeScreen = ({ match, history }) => {
     country: "",
     state: "",
     city: "",
+    age: "",
   });
 
   const keyword = match.params.keyword;
@@ -154,11 +155,38 @@ const HomeScreen = ({ match, history }) => {
     setFilterStatus(true);
   };
 
+  const ageRangeFilter = (event) => {
+    const { name, value } = event.target;
+    setFilter((prevValues) => {
+      return { ...prevValues, [name]: value };
+    });
+    if (value !== "") {
+      const ageRange = value.split("-");
+      const getAge = (model) => {
+        const date = model.DOB.split("-");
+        const ageTimestamp =
+          Date.now() - new Date(date[0], date[1], date[2]).getTime();
+        const age = new Date(ageTimestamp).getUTCFullYear() - 1970;
+        return age;
+      };
+      setModelsList([
+        ...models.filter(
+          (model) =>
+            getAge(model) >= +ageRange[0] && getAge(model) <= +ageRange[1]
+        ),
+      ]);
+      setFilterStatus(true);
+    } else {
+      setFilterStatus(false);
+    }
+  };
+
   const resetFilter = () => {
     setFilter({
       country: "",
       state: "",
       city: "",
+      age: "",
     });
     setFilterStatus(false);
   };
@@ -178,6 +206,7 @@ const HomeScreen = ({ match, history }) => {
     dispatch(listModels(keyword, gender, verified, pageNumber));
     dispatch(listCarousels());
     setFilterStatus(false);
+    resetFilter();
   }, [dispatch, keyword, gender, pageNumber]);
 
   return (
@@ -238,6 +267,19 @@ const HomeScreen = ({ match, history }) => {
                   value={filter.state}
                   onChange={(state) => stateFilter(state)}
                 />
+              </Form.Group>
+              <Form.Group as={Col} md="2" controlId="age">
+                <Form.Control
+                  as="select"
+                  name="age"
+                  value={filter.age}
+                  onChange={ageRangeFilter}
+                >
+                  <option value="">Age</option>
+                  <option value="18-24">18 - 24</option>
+                  <option value="25-29">25 - 29</option>
+                  <option value="30-100">30 and above</option>
+                </Form.Control>
               </Form.Group>
               <Form.Group as={Col} md="2" controlId="city">
                 <Form.Control

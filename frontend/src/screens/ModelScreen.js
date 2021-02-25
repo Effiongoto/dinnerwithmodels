@@ -122,20 +122,20 @@ const ModelScreen = ({ match, history }) => {
           ) : (
             <>
               <h2>{model.username}</h2>
-              <Row>
+              <div className="avatar">
                 <Image
                   src={model.profileImage}
                   alt={model.username}
                   fluid
-                  style={{
-                    height: 300,
-                    marginRight: 20,
-                    marginBottom: 20,
-                    marginLeft: 20,
-                    borderRadius: "20%",
-                  }}
+                  // style={{
+                  //   height: 100,
+                  //   marginRight: 20,
+                  //   marginBottom: 20,
+                  //   marginLeft: 20,
+                  //   borderRadius: "20%",
+                  // }}
                 />
-              </Row>
+              </div>
               {model.images && model.images.length !== 0 && (
                 <Carousel interval={2000}>
                   {model.images.map((image, index) => (
