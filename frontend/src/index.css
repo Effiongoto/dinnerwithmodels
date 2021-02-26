@@ -22,9 +22,11 @@ body.light-theme .carousel-control-next {
 body.light-theme .carousel-control-prev {
   filter: invert(100%);
 }
-body.light-theme h1,
-small {
+body.light-theme h1 {
   color: #222;
+}
+body.light-theme small {
+  color: #ccc;
 }
 body.light-theme h2 {
   color: #222;
@@ -215,14 +217,15 @@ p {
 
 /* Dark mode button */
 .dark-btn {
-  position: fixed;
-  right: 5%;
-  align-items: right;
+  top: 12%;
+  right: 1%;
   z-index: 10;
+  width: 120px;
 }
 .switch {
-  position: fixed;
+  position: relative;
   display: inline-block;
+  align-items: center;
   width: 60px;
   height: 34px;
 }
@@ -279,6 +282,7 @@ input:checked + .slider:before {
 
 .dark-mode-text {
   float: left;
+  margin-right: 1.5%;
   shape-outside: margin-box;
 }
 

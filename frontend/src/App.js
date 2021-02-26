@@ -28,7 +28,6 @@ import VerifyTransactionScreen from "./screens/VerifyTransactionScreen";
 import CarouselListScreen from "./screens/CarouselListScreen";
 import AddCarouselScrren from "./screens/AddCarouselScreen";
 import CarouselEditScreen from "./screens/CarouselEditScreen";
-import DarkModeButton from "./components/DarkModeButton";
 
 const App = () => {
   const getCookie = (name) => {
@@ -69,10 +68,9 @@ const App = () => {
 
   return (
     <Router>
-      <Header />
+      <Header mode={theme} />
       <main className="py-3">
         <Container>
-          <DarkModeButton mode={theme} />
           <Route path="/login" component={LoginScreen} exact />
           <Route path="/register" component={RegisterScreen} exact />
           <Route path="/pay/:id" component={PaymentScreen} exact />
