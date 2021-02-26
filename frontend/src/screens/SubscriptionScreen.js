@@ -74,7 +74,7 @@ const SubscriptionScreen = ({ history }) => {
 
   return (
     <div>
-      <Link to="/admin/userlist" className="btn btn-light my-3">
+      <Link to="/admin/userlist" className="btn btn-dark my-3">
         Go Back
       </Link>
       <FormContainer>
@@ -87,11 +87,7 @@ const SubscriptionScreen = ({ history }) => {
             <Form>
               <Form.Group>
                 <Form.Label>Choose a plan</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="plan"
-                  onChange={handleChange}
-                >
+                <Form.Control as="select" name="plan" onChange={handleChange}>
                   <option value="">Select Plan ...</option>
                   {plans &&
                     plans.map((plan) => {
@@ -106,7 +102,10 @@ const SubscriptionScreen = ({ history }) => {
 
               <Form.Group>
                 <Form.Label>Plan Amount</Form.Label>
-                <Form.Control value={selectedPlan.amount / 100} readOnly></Form.Control>
+                <Form.Control
+                  value={selectedPlan.amount / 100}
+                  readOnly
+                ></Form.Control>
               </Form.Group>
             </Form>
             <PaystackButton
