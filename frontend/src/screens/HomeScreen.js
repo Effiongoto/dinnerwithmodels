@@ -131,13 +131,13 @@ const HomeScreen = ({ match, history }) => {
   }
 
   const countryFilter = (value) => {
-    setFilter({ ...filter, country: value });
+    setFilter({ ...filter, country: value, age: "", city: "" });
     setModelsList([...models.filter((models) => models.country === value)]);
     setFilterStatus(true);
   };
 
   const stateFilter = (value) => {
-    setFilter({ ...filter, state: value });
+    setFilter({ ...filter, state: value, age: "", city: "" });
     setModelsList([...models.filter((models) => models.state === value)]);
     setFilterStatus(true);
   };
@@ -147,11 +147,19 @@ const HomeScreen = ({ match, history }) => {
     setFilter((prevValues) => {
       return { ...prevValues, [name]: value.toLowerCase() };
     });
-    setModelsList([
-      ...models.filter((models) =>
-        models.city.toLowerCase().includes(value.toLowerCase())
-      ),
-    ]);
+    if (filter.country !== "" || filter.state !== "") {
+      setModelsList([
+        ...modelsList.filter((models) =>
+          models.city.toLowerCase().includes(value.toLowerCase())
+        ),
+      ]);
+    } else {
+      setModelsList([
+        ...models.filter((models) =>
+          models.city.toLowerCase().includes(value.toLowerCase())
+        ),
+      ]);
+    }
     setFilterStatus(true);
   };
 
@@ -169,12 +177,21 @@ const HomeScreen = ({ match, history }) => {
         const age = new Date(ageTimestamp).getUTCFullYear() - 1970;
         return age;
       };
-      setModelsList([
-        ...models.filter(
-          (model) =>
-            getAge(model) >= +ageRange[0] && getAge(model) <= +ageRange[1]
-        ),
-      ]);
+      if (filter.country !== "" || filter.state !== "") {
+        setModelsList([
+          ...modelsList.filter(
+            (model) =>
+              getAge(model) >= +ageRange[0] && getAge(model) <= +ageRange[1]
+          ),
+        ]);
+      } else {
+        setModelsList([
+          ...models.filter(
+            (model) =>
+              getAge(model) >= +ageRange[0] && getAge(model) <= +ageRange[1]
+          ),
+        ]);
+      }
       setFilterStatus(true);
     } else {
       setFilterStatus(false);

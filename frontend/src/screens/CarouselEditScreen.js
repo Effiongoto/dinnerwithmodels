@@ -77,7 +77,7 @@ const CarouselEditScreen = ({ match, history }) => {
 
   return (
     <div>
-      <Link to="/admin/carousel" className="btn btn-light">
+      <Link to="/admin/carousel" className="btn btn-dark my-3">
         Go Back
       </Link>
       <FormContainer>

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Ubuntu&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Mr+Dafoe&display=swap");
 body,
 html {
   overflow-x: hidden;
@@ -67,16 +67,21 @@ body.dark-theme h4 {
   color: gold;
 }
 body.dark-theme small {
-  color: goldenrod;
+  color: white;
 }
 body.dark-theme .card {
   background: #222;
 }
 body.dark-theme .list-group-item {
-  background: #222;
+  background: #111;
 }
 body.dark-theme .form-control {
+  color: white;
   background: #222;
+}
+body.dark-theme .alert {
+  color: black;
+  font-weight: 400;
 }
 body.dark-theme .carousel-control-next {
   filter: invert(0%);
@@ -98,6 +103,9 @@ body.dark-theme a {
 body.dark-theme a:hover {
   color: gold;
 }
+body.dark-theme .navbar-brand {
+  color: gold;
+}
 
 html {
   font-size: 100%;
@@ -107,6 +115,12 @@ html {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.navbar-brand {
+  font-family: "Mr Dafoe", "montserrat", sans-serif;
+  font-size: 2rem;
+  text-transform: none;
 }
 
 main {
@@ -261,6 +275,11 @@ input:checked + .slider:before {
 }
 .slider.round:before {
   border-radius: 50%;
+}
+
+.dark-mode-text {
+  float: left;
+  shape-outside: margin-box;
 }
 
 /* date picker */
