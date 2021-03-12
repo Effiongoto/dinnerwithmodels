@@ -97,7 +97,7 @@ const UserEditScreen = ({ match, history }) => {
     setUser((prevValue) => {
       return {
         ...prevValue,
-        [name]: [...new Set([...prevValue.modelsPaidFor, {name: value}])],
+        [name]: [...new Set([...prevValue.modelsPaidFor, { name: value }])],
       };
     });
   };
@@ -107,9 +107,7 @@ const UserEditScreen = ({ match, history }) => {
     setUser((prevValue) => {
       return {
         ...prevValue,
-        [name]: [...prevValue.modelsPaidFor].filter(
-          (el) => el.name !== value
-        ),
+        [name]: [...prevValue.modelsPaidFor].filter((el) => el.name !== value),
       };
     });
   };
@@ -130,7 +128,7 @@ const UserEditScreen = ({ match, history }) => {
 
   return (
     <div>
-      <Link to="/admin/userlist" className="btn btn-light my-3">
+      <Link to="/admin/userlist" className="btn btn-dark my-3">
         Go Back
       </Link>
       <FormContainer>
@@ -188,7 +186,10 @@ const UserEditScreen = ({ match, history }) => {
                   {models &&
                     models
                       .filter(
-                        (model) => !user.modelsPaidFor.find((m) => m.name === model.username)
+                        (model) =>
+                          !user.modelsPaidFor.find(
+                            (m) => m.name === model.username
+                          )
                       )
                       .map((model) => {
                         return (
@@ -210,7 +211,11 @@ const UserEditScreen = ({ match, history }) => {
                   <option value="">Select Models Paid For ...</option>
                   {models &&
                     models
-                      .filter((model) => user.modelsPaidFor.find((m) => m.name ===model.username))
+                      .filter((model) =>
+                        user.modelsPaidFor.find(
+                          (m) => m.name === model.username
+                        )
+                      )
                       .map((model) => {
                         return (
                           <option key={model._id} value={model.name}>
@@ -224,25 +229,29 @@ const UserEditScreen = ({ match, history }) => {
 
             <Form.Group>
               <Form.Label>Models Paid For</Form.Label>
-              <Form.Control value={user.modelsPaidFor.map((m) => m.name)} readOnly></Form.Control>
+              <Form.Control
+                value={user.modelsPaidFor.map((m) => m.name)}
+                readOnly
+              ></Form.Control>
             </Form.Group>
 
-            {userDetail.isSubscribed && userDetail.isSubscribed.status === "active" && (
-              <Form.Group>
-                <Form.Check
-                  type="checkbox"
-                  label="Is Subscribed"
-                  checked={
-                    user.isSubscribed && user.isSubscribed.status === "active"
-                      ? true
-                      : false
-                  }
-                  name="isSubscribed"
-                  onChange={handleCheck}
-                  value={user.isSubscribed}
-                ></Form.Check>
-              </Form.Group>
-            )}
+            {userDetail.isSubscribed &&
+              userDetail.isSubscribed.status === "active" && (
+                <Form.Group>
+                  <Form.Check
+                    type="checkbox"
+                    label="Is Subscribed"
+                    checked={
+                      user.isSubscribed && user.isSubscribed.status === "active"
+                        ? true
+                        : false
+                    }
+                    name="isSubscribed"
+                    onChange={handleCheck}
+                    value={user.isSubscribed}
+                  ></Form.Check>
+                </Form.Group>
+              )}
 
             <Form.Group>
               <Form.Check

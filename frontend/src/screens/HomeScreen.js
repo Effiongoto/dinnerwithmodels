@@ -24,6 +24,7 @@ const HomeScreen = ({ match, history }) => {
     country: "",
     state: "",
     city: "",
+    age: "",
   });
 
   const keyword = match.params.keyword;
@@ -130,13 +131,13 @@ const HomeScreen = ({ match, history }) => {
   }
 
   const countryFilter = (value) => {
-    setFilter({ ...filter, country: value });
+    setFilter({ ...filter, country: value, age: "", city: "" });
     setModelsList([...models.filter((models) => models.country === value)]);
     setFilterStatus(true);
   };
 
   const stateFilter = (value) => {
-    setFilter({ ...filter, state: value });
+    setFilter({ ...filter, state: value, age: "", city: "" });
     setModelsList([...models.filter((models) => models.state === value)]);
     setFilterStatus(true);
   };
@@ -146,12 +147,55 @@ const HomeScreen = ({ match, history }) => {
     setFilter((prevValues) => {
       return { ...prevValues, [name]: value.toLowerCase() };
     });
-    setModelsList([
-      ...models.filter((models) =>
-        models.city.toLowerCase().includes(value.toLowerCase())
-      ),
-    ]);
+    if (filter.country !== "" || filter.state !== "") {
+      setModelsList([
+        ...modelsList.filter((models) =>
+          models.city.toLowerCase().includes(value.toLowerCase())
+        ),
+      ]);
+    } else {
+      setModelsList([
+        ...models.filter((models) =>
+          models.city.toLowerCase().includes(value.toLowerCase())
+        ),
+      ]);
+    }
     setFilterStatus(true);
+  };
+
+  const ageRangeFilter = (event) => {
+    const { name, value } = event.target;
+    setFilter((prevValues) => {
+      return { ...prevValues, [name]: value };
+    });
+    if (value !== "") {
+      const ageRange = value.split("-");
+      const getAge = (model) => {
+        const date = model.DOB.split("-");
+        const ageTimestamp =
+          Date.now() - new Date(date[0], date[1], date[2]).getTime();
+        const age = new Date(ageTimestamp).getUTCFullYear() - 1970;
+        return age;
+      };
+      if (filter.country !== "" || filter.state !== "") {
+        setModelsList([
+          ...modelsList.filter(
+            (model) =>
+              getAge(model) >= +ageRange[0] && getAge(model) <= +ageRange[1]
+          ),
+        ]);
+      } else {
+        setModelsList([
+          ...models.filter(
+            (model) =>
+              getAge(model) >= +ageRange[0] && getAge(model) <= +ageRange[1]
+          ),
+        ]);
+      }
+      setFilterStatus(true);
+    } else {
+      setFilterStatus(false);
+    }
   };
 
   const resetFilter = () => {
@@ -159,6 +203,7 @@ const HomeScreen = ({ match, history }) => {
       country: "",
       state: "",
       city: "",
+      age: "",
     });
     setFilterStatus(false);
   };
@@ -178,6 +223,7 @@ const HomeScreen = ({ match, history }) => {
     dispatch(listModels(keyword, gender, verified, pageNumber));
     dispatch(listCarousels());
     setFilterStatus(false);
+    resetFilter();
   }, [dispatch, keyword, gender, pageNumber]);
 
   return (
@@ -239,6 +285,19 @@ const HomeScreen = ({ match, history }) => {
                   onChange={(state) => stateFilter(state)}
                 />
               </Form.Group>
+              <Form.Group as={Col} md="2" controlId="age">
+                <Form.Control
+                  as="select"
+                  name="age"
+                  value={filter.age}
+                  onChange={ageRangeFilter}
+                >
+                  <option value="">Age</option>
+                  <option value="18-24">18 - 24</option>
+                  <option value="25-29">25 - 29</option>
+                  <option value="30-100">30 and above</option>
+                </Form.Control>
+              </Form.Group>
               <Form.Group as={Col} md="2" controlId="city">
                 <Form.Control
                   type="text"
@@ -251,7 +310,7 @@ const HomeScreen = ({ match, history }) => {
             </Form.Row>
           </Form>
           <Button onClick={resetFilter}>
-            <i className="fas fa-undo" style={{ color: "white" }}></i>
+            <i className="fas fa-undo"></i>
           </Button>
         </div>
       )}
@@ -263,7 +322,7 @@ const HomeScreen = ({ match, history }) => {
         ) : (
           <>
             <Col md={9}>
-              <h1 style={{ fontFamily: "Imbue" }}>{heading}</h1>
+              <h1>{heading}</h1>
               {!filterStatus ? (
                 models && models.length !== 0 ? (
                   <Row>
@@ -274,7 +333,7 @@ const HomeScreen = ({ match, history }) => {
                     ))}
                   </Row>
                 ) : (
-                  <h1 style={{ fontFamily: "Imbue" }}>No models found :(</h1>
+                  <h1>No models found :(</h1>
                 )
               ) : modelsList && modelsList.length !== 0 ? (
                 <Row>
@@ -285,7 +344,7 @@ const HomeScreen = ({ match, history }) => {
                   ))}
                 </Row>
               ) : (
-                <h1 style={{ fontFamily: "Imbue" }}>No models found :(</h1>
+                <h1>No models found :(</h1>
               )}
               <Paginate
                 pages={pages}

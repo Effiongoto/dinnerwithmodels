@@ -1,9 +1,0 @@
-.carousel-control-next,
-.carousel-control-prev {
-  filter: invert(100%);
-}
-
-.carousel-inner {
-  margin: auto;
-  max-width: 20%;
-}

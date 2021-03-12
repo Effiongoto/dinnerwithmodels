@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import FormContainer from '../components/FormContainer';
-import { listModelDetails, updateModel } from '../actions/modelActions';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
+import FormContainer from "../components/FormContainer";
+import { listModelDetails, updateModel } from "../actions/modelActions";
 import {
   MODEL_UPDATE_RESET,
   MODEL_DETAILS_RESET,
-} from '../constants/modelConstants';
+} from "../constants/modelConstants";
 
 const ModelEditScreen = ({ match, history }) => {
   const modelID = match.params.id;
 
   // const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isVerified, setIsVerified] = useState(false);
 
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const ModelEditScreen = ({ match, history }) => {
     if (successUpdate) {
       dispatch({ type: MODEL_UPDATE_RESET });
       dispatch({ type: MODEL_DETAILS_RESET });
-      history.push('/admin/modellist');
+      history.push("/admin/modellist");
     } else {
       dispatch(listModelDetails(match.params.id));
       if (model.username) {
@@ -79,17 +79,17 @@ const ModelEditScreen = ({ match, history }) => {
 
   return (
     <>
-      <Link to='/admin/modellist' className='btn btn-light my-3'>
+      <Link to="/admin/modellist" className="btn btn-dark my-3">
         Go Back
       </Link>
       <FormContainer>
         <h1>Edit Model</h1>
         {loadingUpdate && <Loader />}
-        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+        {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
         {loading ? (
           <Loader />
         ) : error ? (
-          <Message variant='danger'>{error}</Message>
+          <Message variant="danger">{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
             {/* <Form.Group controlId='name'>
@@ -102,26 +102,26 @@ const ModelEditScreen = ({ match, history }) => {
               ></Form.Control>
             </Form.Group> */}
 
-            <Form.Group controlId='email'>
+            <Form.Group controlId="email">
               <Form.Label>Email Address</Form.Label>
               <Form.Control
-                type='email'
-                placeholder='Enter email'
+                type="email"
+                placeholder="Enter email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='isVerified'>
+            <Form.Group controlId="isVerified">
               <Form.Check
-                type='checkbox'
-                label='Is Verified'
+                type="checkbox"
+                label="Is Verified"
                 checked={isVerified}
                 onChange={(e) => setIsVerified(e.target.checked)}
               ></Form.Check>
             </Form.Group>
 
-            <Button type='submit' variant='primary'>
+            <Button type="submit" variant="primary">
               Update
             </Button>
           </Form>
